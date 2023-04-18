@@ -7,7 +7,6 @@ function Navbar() {
         <Nav>
             <div className="title">
                 <h1>Comeback Hotel</h1>
-                <h5>Short Code - 12636</h5>
             </div>
             <div className="search">
                 <BiSearch />

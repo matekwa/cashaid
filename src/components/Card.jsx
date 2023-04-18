@@ -19,7 +19,7 @@ function Card() {
                     <h6>CARD HOLDER</h6>
                 </div>
                 <div className="profile">
-                    <h6>AAE IdeaPro</h6>
+                    <h6>Equity Visa Card</h6>
                     <span className="t1">Mastercard</span>
                 </div>
             </div>

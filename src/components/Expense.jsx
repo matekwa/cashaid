@@ -145,9 +145,9 @@ export default Expense
 const Section = styled.section`
 .expense {
     padding: 0.8rem 0.8rem 0.8rem 0.8rem;
-    border-radius: 1rem;
+    border-radius: 0;
     color: white;
-    background-color: #5f7482;
+    background-color: #0C2340;
     align-items: center;
     gap: 0.5rem;
     transition: 0.5s ease-in-out;

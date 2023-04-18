@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { FcNegativeDynamic } from "react-icons/fc";
-import { AiOutlineMore } from "react-icons/ai";
+import { GrTransaction } from "react-icons/gr";
 import { FcPositiveDynamic } from "react-icons/fc";
-import { GiMoneyStack } from "react-icons/gi";
-import { GiPayMoney } from 'react-icons/gi'
+import { GiReceiveMoney } from "react-icons/gi";
+import { GiPayMoney } from 'react-icons/gi';
+import { Link } from 'react-router-dom';
 
 function Analytic() {
     return (
@@ -12,14 +12,11 @@ function Analytic() {
             <div className="analytic ">
                 <div className="design">
                     <div className="logo">
-                        <GiMoneyStack />
-                    </div>
-                    <div className="action">
-                    <AiOutlineMore />
+                        <GiReceiveMoney />
                     </div>
                 </div>
                 <div className="transfer">
-                    <h6>Total Amount</h6>
+                    <h6>Revenue</h6>
                 </div>
                 <div className="money">
                     <h5>KES 12,000</h5>
@@ -30,12 +27,9 @@ function Analytic() {
                     <div className="logo">
                         <GiPayMoney />
                     </div>
-                    <div className="action">
-                    <AiOutlineMore />
-                    </div>
                 </div>
                 <div className="transfer">
-                    <h6>Today's Expense</h6>
+                    <h6>Expense</h6>
                 </div>
                 <div className="money">
                     <h5>KES 1,200</h5>
@@ -46,47 +40,44 @@ function Analytic() {
                     <div className="logo">
                         <FcPositiveDynamic />
                     </div>
-                    <div className="action">
-                    <AiOutlineMore />
-                    </div>
                 </div>
                 <div className="transfer">
-                    <h6>Net Profit </h6>
+                    <h6>Profit Margin</h6>
                 </div>
                 <div className="money">
                     <h5>KES 500</h5>
                 </div>
             </div>
             <div className="analytic ">
-                <div className="design">
-                    <div className="logo">
-                        <FcNegativeDynamic />
+                <Link to='transactions' className='link'>
+                    <div className="design">
+                        <div className="logo">
+                            <GrTransaction />
+                        </div>
                     </div>
-                    <div className="action">
-                    <AiOutlineMore />
+                    <div className="transfer">
+                        <h6>Transactions</h6>
                     </div>
-                </div>
-                <div className="transfer">
-                    <h6>Net Loss</h6>
-                </div>
-                <div className="money">
-                    <h5>KES 0</h5>
-                </div>
+                    <div className="money">
+                        <h5>5</h5>
+                    </div>
+                </Link>
             </div>
-         
-          
-         
-           
+
+
+
+
         </Section>
     )
 }
 
 export default Analytic
-const Section = styled.section `
+const Section = styled.section`
+
     display: flex;
     grid-template-columns: repeat(4, 1fr);
     justify-content: space-between;
-    margin: 0 60px;
+    margin: 0 50px;
     .analytic {
         justify-content: space-between;
         padding: 1rem 2rem 1rem 2rem;
@@ -96,12 +87,13 @@ const Section = styled.section `
         justify-content: space-evenly;
         align-items: center;
         transition: 0.5s ease-in-out;
-        width: 170px;
+        width: 200px;
+        
+        .link{
+            text-decoration: none;
+        }
        
         .design{
-            display: flex;
-            align-items: center;
-            
             .logo {
                 background-color: white;
                 display: flex;
@@ -109,23 +101,22 @@ const Section = styled.section `
                 align-items: center;
                
                 svg {
-                    font-size: 2rem;
+                    font-size: 3rem;
                 }
             }
-            .action {
-                margin-left: 80px;
-               svg{
-                font-size: 1.5rem;
-               }
-            }
-
         }
         .transfer {
+            text-align: center;
             margin-top: 20px;
-            color: grey
+            color: black;
+            font-size: 18px;
+            text-decoration: none;
         }
         .money {
             margin-top: 20px;  
+            font-size: 22px;
+            text-align: center;
+            text-decoration: none;
         }
     }
 `;

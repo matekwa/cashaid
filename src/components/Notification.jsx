@@ -1,9 +1,6 @@
 import React, { MouseEvent} from 'react'
 import styled from 'styled-components'
-import { AiOutlineCalendar } from "react-icons/ai";
-import { AiOutlineBell } from "react-icons/ai";
-import { AiOutlineCaretDown } from "react-icons/ai";
-import avatarImage from "../assets/avatar.jpg"
+import { BiWallet } from 'react-icons/bi';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -33,6 +30,8 @@ function Notification() {
         <Nav>
             <div className="notification">
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                    <Typography sx={{ minWidth: 100}}>Help</Typography>
+                    <Typography sx={{ minWidth: 100, fontSize: 25 }}><BiWallet /></Typography>
                     <Tooltip title="Account settings">
                         <IconButton
                             onClick={handleClick}
@@ -112,28 +111,7 @@ function Notification() {
 export default Notification
 const Nav = styled.nav`
 display: flex;
-justify-content: space-between;
 justify-content: right;
-.notification{
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0 1rem;
-    .font_icon{
-        font-size: 1.5rem;
-    }
-    svg{
-        color: grey;
-    }
-    .image {
-        display: flex;
-        gap: 1rem;
-        img{
-            height: 2.5rem;
-            width: 2.5rem;
-            border-radius: 3rem;
-        }
-    }
-}
+
 `
 ;

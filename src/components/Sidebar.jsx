@@ -1,13 +1,13 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { BiHomeAlt } from "react-icons/bi";
-import { AiOutlineFundProjectionScreen } from "react-icons/ai";
 import { BsCreditCard2Front } from "react-icons/bs";
-import { AiOutlineTrophy } from "react-icons/ai";
-import { AiOutlineFileText } from "react-icons/ai";
 import { AiOutlineDotChart } from "react-icons/ai";
-import { BsCircleFill } from "react-icons/bs";
+import { AiOutlineSchedule } from 'react-icons/ai';
+import { FaAward } from 'react-icons/fa';
+import { VscSettingsGear  } from 'react-icons/vsc';
+import { MdOutlineReceiptLong } from 'react-icons/md';
 
 
 function Sidebar() {
@@ -15,59 +15,72 @@ function Sidebar() {
     return (
         <Section>
             <div className="top">
-                    <div className="brand">
-                        <h3>Kashaid</h3>
-                    </div>
-                    <div className="links">
-                        <ul>
-                            <li
+                <div className="brand">
+                    <h3>Cashaid</h3>
+                </div>
+                <div className="links">
+                    <ul>
+                        <li
                             className={currentLink === 1 ? "active" : "none"}
                             onClick={() => setCurrentLink(1)}
-                            >
-                                <Link to="/">
-                                    <BiHomeAlt />
-                                </Link>
-                            </li>
-                            <li
-                            className={currentLink === 2 ? "active" : "none"}
-                            onClick={() => setCurrentLink(2)}
-                            >
-                                <Link to="transactions">
-                                    <AiOutlineFileText />
-                                </Link>
-                            </li>
-                            <li
+                        >
+                            <Link to="/">
+                                <BiHomeAlt />
+                            </Link>
+                        </li>
+                        <li
+                            className={currentLink === 3 ? "active" : "none"}
+                            onClick={() => setCurrentLink(3)}
+                        >
+                            <Link to='scheduler'>
+                                <AiOutlineSchedule />
+                            </Link>
+                        </li>
+                        <li
                             className={currentLink === 4 ? "active" : "none"}
                             onClick={() => setCurrentLink(4)}
-                            >
-                                <a href="#" className="noti">
-                                    <BsCreditCard2Front />
-                                    <span>2</span>
-                                </a>
-                            </li>
-                            <li
-                            className={currentLink === 5 ? "active" : "none"}
-                            onClick={() => setCurrentLink(5)}
-                            >
-                                <a href="#">
-                                    <AiOutlineTrophy />
-                                    
-                                </a>
-                            </li>
-                            <li
+                        >
+                            <Link to='inventory-manager'>
+                                < AiOutlineDotChart />
+                            </Link>
+                        </li>
+                        <li
+                            className={currentLink === 7 ? "active" : "none"}
+                            onClick={() => setCurrentLink(7)}
+                        >
+                            <Link to='POS'>
+                                < MdOutlineReceiptLong />
+                            </Link>
+                        </li>
+                        <li
                             className={currentLink === 6 ? "active" : "none"}
                             onClick={() => setCurrentLink(6)}
-                            >
-                                <a href="#">
-                                    <AiOutlineDotChart />
-                                    
-                                </a>
-                            </li>
-                          
-                        </ul>
-                    </div>
+                        >
+                            <Link to='creditcard' className="noti">
+                                < BsCreditCard2Front />
+                                <span>1</span>
+                            </Link>
+                        </li>
+                        <li
+                            className={currentLink === 5 ? "active" : "none"}
+                            onClick={() => setCurrentLink(5)}
+                        >
+                            <Link to='customerloyalty'>
+                                < FaAward />
+                            </Link>
+                        </li>
+                        <li
+                            className={currentLink === 8 ? "active" : "none"}
+                            onClick={() => setCurrentLink(8)}
+                        >
+                            <Link to='settings' className='settings'>
+                                < VscSettingsGear />
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
             </div>
-           
+
         </Section>
     )
 }
@@ -96,15 +109,7 @@ gap: 2rem;
         justify-content: center;
         align-items: center;
         gap: 1.3rem 0;
-        .color1{
-            color: red;
-        }
-        .color2{
-            color: yellow;
-        }
-        .color3{
-            color: green;
-        }
+        
         svg {
             margin: 0 2px;
             font-size: 0.8rem;
@@ -112,13 +117,20 @@ gap: 2rem;
         }
        
     }
+    .settings{
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 10px;
+    }
     .links {
        
         ul {
           
             margin-bottom: 3rem;
             .active {
-                border-right: 0.2rem solid black;   
+                background: white;
+                padding: 2px 0;
+                border-radius: 10px 0 0 10px;   
                 a {
                     color: black;
                 }
@@ -164,4 +176,4 @@ gap: 2rem;
 
 
 `
-;
+    ;

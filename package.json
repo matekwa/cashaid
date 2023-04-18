@@ -10,10 +10,22 @@
     "@mui/styled-engine-sc": "^5.11.11",
     "@mui/x-data-grid": "^6.0.4",
     "@mui/x-date-pickers": "^6.0.4",
+    "@syncfusion/ej2": "^21.1.38",
+    "@syncfusion/ej2-data": "^21.1.38",
+    "@syncfusion/ej2-material-theme": "^21.1.38",
+    "@syncfusion/ej2-react-buttons": "^21.1.37",
+    "@syncfusion/ej2-react-calendars": "^21.1.38",
+    "@syncfusion/ej2-react-charts": "^21.1.38",
+    "@syncfusion/ej2-react-dropdowns": "^21.1.38",
+    "@syncfusion/ej2-react-inputs": "^21.1.38",
+    "@syncfusion/ej2-react-navigations": "^21.1.38",
+    "@syncfusion/ej2-react-schedule": "^21.1.38",
+    "@syncfusion/ej2-react-splitbuttons": "^21.1.37",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "dayjs": "^1.11.7",
+    "moment-timezone": "^0.5.43",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
@@ -47,5 +59,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-mui-scheduler": "^2.0.4"
   }
 }

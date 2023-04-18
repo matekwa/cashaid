@@ -4,7 +4,6 @@ import Navbar from './Navbar'
 import Analytic from './Analytic'
 import Balance from './Balance'
 import History from './History'
-import RightSidebar from './RightSidebar'
 function Dashboard() {
     return (
         <Section>
@@ -12,7 +11,7 @@ function Dashboard() {
                     <Navbar />
                     <Analytic />
                     <Balance />
-                    <History />    
+                    <History />   
             </div>
         </Section>
     );
