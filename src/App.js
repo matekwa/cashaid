@@ -11,6 +11,10 @@ import EventScheduler from './components/EventScheduler';
 import Analytics from './components/Analytics'
 import InventoryIndex from './inventory/Main';
 import AddShop from './inventory/AddShop';
+import Outlets from './inventory/Outlets';
+import AddUsers from './inventory/AddUser';
+import ProductCatalogue from './inventory/ProductCatalogue';
+
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +27,9 @@ function App() {
         <Route path="analytics" element={<Analytics />} />
         <Route path="inventory-manager" element={<InventoryIndex />} />
         <Route path="inventory-manager/add-business-name" element={<AddShop />} />
+        <Route path="inventory-manager/add-outlets" element={<Outlets />} />
+        <Route path="inventory-manager/user-roles" element={<AddUsers />} />
+        <Route path="inventory-manager/product-catalogue" element={<ProductCatalogue />} />
       </Routes>
     </Div>
     </BrowserRouter>

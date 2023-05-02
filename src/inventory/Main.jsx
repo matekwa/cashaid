@@ -39,7 +39,9 @@ const index = () => {
                         <p>Customize settings for all your outlets to simplify checkout process. </p>
                     </div>
                     <div className="button">
-                        <button>Add Outlet</button>
+                        <Link to='add-outlets'>
+                            <button>Add Outlet</button>
+                        </Link>
                     </div>
                 </div>
                 <div className="card">
@@ -51,7 +53,9 @@ const index = () => {
                         <p>Create user accounts and manage what your users can see and allowed to do.</p>
                     </div>
                     <div className="button">
-                        <button>Add user <MdOutlineAdd /></button>
+                        <Link to='user-roles'>
+                            <button>Add user</button>
+                        </Link>
                     </div>
                 </div>
                 <div className="card">
@@ -63,7 +67,9 @@ const index = () => {
                         <p>Build your product catalogue so that you can manage your stock seamleslly.</p>
                     </div>
                     <div className="button">
-                        <button>Add Product <MdOutlineAdd /></button>
+                        <Link to='product-catalogue'>
+                            <button>Add Product</button>
+                        </Link>
                     </div>
                 </div>
                 <div className="card">
@@ -163,6 +169,7 @@ const Section = styled.section`
                 position: absolute;
                 padding: 12px;
                 bottom: 0;
+                cursor: pointer;
             }
         }
     }

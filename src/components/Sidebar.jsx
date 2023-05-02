@@ -16,7 +16,7 @@ function Sidebar() {
         <Section>
             <div className="top">
                 <div className="brand">
-                    <h3>Cashaid</h3>
+                    <h3>Stockyspace</h3>
                 </div>
                 <div className="links">
                     <ul>
@@ -108,13 +108,7 @@ gap: 2rem;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 1.3rem 0;
-        
-        svg {
-            margin: 0 2px;
-            font-size: 0.8rem;
-            
-        }
+        padding: 0 5px;
        
     }
     .settings{
@@ -130,6 +124,7 @@ gap: 2rem;
             .active {
                 background: white;
                 padding: 2px 0;
+                margin-left: 7px;
                 border-radius: 10px 0 0 10px;   
                 a {
                     color: black;
@@ -165,6 +160,7 @@ gap: 2rem;
                 &:hover{
                     a {
                         color: black;
+                        transform: scale(1.1);
                     }
                 }
                
