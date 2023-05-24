@@ -48,7 +48,7 @@ function Sidebar() {
                             className={currentLink === 7 ? "active" : "none"}
                             onClick={() => setCurrentLink(7)}
                         >
-                            <Link to='POS'>
+                            <Link to='pos-terminal'>
                                 < MdOutlineReceiptLong />
                             </Link>
                         </li>

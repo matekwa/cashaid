@@ -14,6 +14,8 @@ import AddShop from './inventory/AddShop';
 import Outlets from './inventory/Outlets';
 import AddUsers from './inventory/AddUser';
 import ProductCatalogue from './inventory/ProductCatalogue';
+import Receipts from './inventory/Receipts'
+import POS from './POS/Darshboard';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
         <Route path="inventory-manager/add-outlets" element={<Outlets />} />
         <Route path="inventory-manager/user-roles" element={<AddUsers />} />
         <Route path="inventory-manager/product-catalogue" element={<ProductCatalogue />} />
+        <Route path="inventory-manager/receipts" element={<Receipts />} />
+        <Route path="pos-terminal" element={<POS />} />
       </Routes>
     </Div>
     </BrowserRouter>

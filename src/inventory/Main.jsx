@@ -5,7 +5,7 @@ import outlet from '../assets/outlet.jpg';
 import product from '../assets/product.jpg';
 import receipt from '../assets/receipt.jpg';
 import users from '../assets/users.jpg';
-import { MdOutlineAdd } from 'react-icons/md';
+import done from '../assets/done.jpg';
 import { Link } from 'react-router-dom';
 
 const index = () => {
@@ -77,23 +77,25 @@ const index = () => {
                         <img src={receipt} alt='Receipt' />
                     </div>
                     <div className="description">
-                        <h3>Customize your receipt templates</h3>
-                        <p>Choose the look and feel of you receipts generated to your customers.</p>
+                        <h3>Enable receipt generation</h3>
+                        <p>Enable receipts that will be generated to your customers when billing.</p>
                     </div>
                     <div className="button">
-                        <button>Customize receipt <MdOutlineAdd /></button>
+                        <Link to='receipts'>
+                            <button>Enable receipt</button>
+                        </Link>
                     </div>
                 </div>
                 <div className="card">
                     <div className="illustration">
-                        <img src={receipt} alt='Receipt' />
+                        <img src={done} alt='Receipt' />
                     </div>
                     <div className="description">
-                        <h3>Customize your receipt templates</h3>
-                        <p>Choose the look and feel of you receipts generated to your customers.</p>
+                        <h3>I'm Ready</h3>
+                        <p>I have completed all the steps successfully.</p>
                     </div>
                     <div className="button">
-                        <button>I'm Ready</button>
+                        <button>Continue</button>
                     </div>
                 </div>
             </div>
