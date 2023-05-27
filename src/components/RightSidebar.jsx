@@ -1,19 +1,19 @@
-import React from 'react'
-import styled from 'styled-components'
-import Notification from './Notification'
-import Card from './Card'
-import Activity from './Activity'
-import Payment from './Payment'
-
+import React from 'react';
+import styled from 'styled-components';
+import Notification from './Notification';
+import Card from './Card';
+import Activity from './Activity';
+import Payment from './Payment';
+import AddCard from './AddCard';
 function RightSidebar() {
+    const [cardPresent, setCardPresent] = React.useState(true);
     return (
         <Section>
             <div className="grid">
                 <Notification />
-                <Card />
+                {cardPresent === true ? <Card /> : <AddCard />}
                 <Activity />
                 <Payment />
-
             </div>
         </Section>
     )

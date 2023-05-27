@@ -8,7 +8,7 @@ import Login from './pages/Login';
 import EmailValidation from './pages/EmailValidation';
 import Transactions from './components/Transactions';
 import EventScheduler from './components/EventScheduler';
-import Analytics from './components/Analytics'
+import Analytics from './components/Analytics';
 import InventoryIndex from './inventory/Main';
 import AddShop from './inventory/AddShop';
 import Outlets from './inventory/Outlets';
@@ -16,6 +16,8 @@ import AddUsers from './inventory/AddUser';
 import ProductCatalogue from './inventory/ProductCatalogue';
 import Receipts from './inventory/Receipts'
 import POS from './POS/Darshboard';
+import Card from './Card/Dashboard.jsx';
+import LoyaltyList from './Loyalty/Main'
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
         <Route path="inventory-manager/product-catalogue" element={<ProductCatalogue />} />
         <Route path="inventory-manager/receipts" element={<Receipts />} />
         <Route path="pos-terminal" element={<POS />} />
+        <Route path="link-card" element={<Card />} />
+        <Route path="loyal-customers" element={<LoyaltyList />} />
       </Routes>
     </Div>
     </BrowserRouter>

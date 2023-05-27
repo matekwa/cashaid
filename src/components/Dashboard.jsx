@@ -1,24 +1,26 @@
-import React from 'react'
-import styled from 'styled-components'
-import Navbar from './Navbar'
-import Analytic from './Analytic'
-import Balance from './Balance'
-import History from './History'
+import React from 'react';
+import styled from 'styled-components';
+import Navbar from './Navbar';
+import Analytic from './Analytic';
+import Balance from './Balance';
+import History from './History';
+import Footer from './Footer';
 function Dashboard() {
     return (
         <Section>
-            <div className="grid">        
-                    <Navbar />
-                    <Analytic />
-                    <Balance />
-                    <History />   
+            <div className="grid">
+                <Navbar />
+                <Analytic />
+                <Balance />
+                <History />
+                <Footer />
             </div>
         </Section>
     );
 }
 
 export default Dashboard
-const Section = styled.section `
+const Section = styled.section`
 margin-left: 5vw;
 margin-right: 14px;
 padding: 2rem;
@@ -31,7 +33,6 @@ background-color: #F5F5FD;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-   
 }
 
 `;

@@ -6,7 +6,7 @@ import { BsCreditCard2Front } from "react-icons/bs";
 import { AiOutlineDotChart } from "react-icons/ai";
 import { AiOutlineSchedule } from 'react-icons/ai';
 import { FaAward } from 'react-icons/fa';
-import { VscSettingsGear  } from 'react-icons/vsc';
+import { VscSettingsGear } from 'react-icons/vsc';
 import { MdOutlineReceiptLong } from 'react-icons/md';
 
 
@@ -16,7 +16,7 @@ function Sidebar() {
         <Section>
             <div className="top">
                 <div className="brand">
-                    <h3>Stockyspace</h3>
+                    <h3>Cashaid</h3>
                 </div>
                 <div className="links">
                     <ul>
@@ -29,50 +29,47 @@ function Sidebar() {
                             </Link>
                         </li>
                         <li
-                            className={currentLink === 3 ? "active" : "none"}
-                            onClick={() => setCurrentLink(3)}
+                            className={currentLink === 2 ? "active" : "none"}
+                            onClick={() => setCurrentLink(2)}
                         >
                             <Link to='scheduler'>
                                 <AiOutlineSchedule />
                             </Link>
                         </li>
                         <li
-                            className={currentLink === 4 ? "active" : "none"}
-                            onClick={() => setCurrentLink(4)}
+                            className={currentLink === 3 ? "active" : "none"}
+                            onClick={() => setCurrentLink(3)}
                         >
                             <Link to='inventory-manager'>
                                 < AiOutlineDotChart />
                             </Link>
                         </li>
                         <li
-                            className={currentLink === 7 ? "active" : "none"}
-                            onClick={() => setCurrentLink(7)}
+                            className={currentLink === 4 ? "active" : "none"}
+                            onClick={() => setCurrentLink(4)}
                         >
                             <Link to='pos-terminal'>
                                 < MdOutlineReceiptLong />
                             </Link>
                         </li>
                         <li
-                            className={currentLink === 6 ? "active" : "none"}
-                            onClick={() => setCurrentLink(6)}
+                            className={currentLink === 5 ? "active" : "none"}
+                            onClick={() => setCurrentLink(5)}
                         >
-                            <Link to='creditcard' className="noti">
+                            <Link to='link-card' className="noti">
                                 < BsCreditCard2Front />
                                 <span>1</span>
                             </Link>
                         </li>
                         <li
-                            className={currentLink === 5 ? "active" : "none"}
-                            onClick={() => setCurrentLink(5)}
+                            className={currentLink === 6 ? "active" : "none"}
+                            onClick={() => setCurrentLink(6)}
                         >
-                            <Link to='customerloyalty'>
+                            <Link to='loyal-customers'>
                                 < FaAward />
                             </Link>
                         </li>
-                        <li
-                            className={currentLink === 8 ? "active" : "none"}
-                            onClick={() => setCurrentLink(8)}
-                        >
+                        <li>
                             <Link to='settings' className='settings'>
                                 < VscSettingsGear />
                             </Link>
@@ -80,7 +77,6 @@ function Sidebar() {
                     </ul>
                 </div>
             </div>
-
         </Section>
     )
 }
@@ -109,7 +105,6 @@ gap: 2rem;
         justify-content: center;
         align-items: center;
         padding: 0 5px;
-       
     }
     .settings{
         position: absolute;
