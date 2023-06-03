@@ -2,13 +2,53 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import background from '../assets/background.jpg';
 import { IoMdArrowRoundForward } from 'react-icons/io';
+import axios from 'axios';
+import { baseURL } from '../utils/constant';
 
 
 const Login = () => {
-    const [error, setError] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+
+    const handleSignin = async (e) => {
+        e.preventDefault();
+
+        //Validations
+        const validationErrors = {};
+        if (!email) {
+            validationErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            validationErrors.email = 'Invalid email address';
+        }
+        if (!password) {
+            validationErrors.password = 'Password is required';
+        } else if (password.length < 6) {
+            validationErrors.password = 'Password must be at least 6 characters long';
+        }
+
+        if (Object.keys(validationErrors).length === 0) {
+            // Form is valid, submit data to the server
+            const userData = {
+                email,
+                password
+            }
+            try {
+                await axios.post(`${baseURL}/login`, userData).then(response => console.log(response.data));
+                setEmail('');
+                setPassword('');
+                setErrors({});
+            }
+            catch (e) {
+                console.log(e);
+            }
+        } else {
+            // Form is invalid, update errors state
+            setErrors(validationErrors);
+        }
+    }
     return (
         <Section>
-
             <div>
                 <img src={background} className="imagebg" alt="Background"></img>
             </div>
@@ -17,24 +57,21 @@ const Login = () => {
             </header>
             <body>
                 <div className='logincard'>
-                    <form>
+                    <form action='POST'>
                         <h1>Sign in</h1>
                         <div className='inputelement'>
                             <label>Email</label>
-                            <input  type="text" value='kashaid@gmail.com' />
+                            <input type="email" autoFocus placeholder='johndoe@example.com' name='email' id='email' value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className='inputelement'>
                             <label>Password</label>
-                            <input  type="password" autoFocus />
-                        </div>
-                        <div>
-                            {error ? <p className='error'>Error</p> : ''}
+                            <input type="password" name='password' id='password' value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         <div className='rememberme'>
                             <p>Forgot Password</p>
                         </div>
-                        <div className = 'submitbutton'>
-                            <button>Sign In &nbsp;<IoMdArrowRoundForward /> </button>
+                        <div className='submitbutton'>
+                            <button type='submit' onClick={handleSignin}>Sign In &nbsp;<IoMdArrowRoundForward /> </button>
                         </div>
                     </form>
                 </div>

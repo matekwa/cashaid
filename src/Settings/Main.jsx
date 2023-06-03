@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import UserDetails from './UserDetails';
 import Profile from './Profile';
 import Password from './Password';
-import Plans from './Plan';
+import Plans from './Plans';
 import Billing from './Billing';
 import Integration from './Integration';
 import Preference from './Preference';

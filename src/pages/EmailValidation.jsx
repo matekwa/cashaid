@@ -8,7 +8,6 @@ const Login = () => {
     const [error, setError] = useState(false);
     return (
         <Section>
-
             <div>
                 <img src={background} className="imagebg" alt="Background"></img>
             </div>
