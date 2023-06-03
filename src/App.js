@@ -24,8 +24,8 @@ function App() {
     <BrowserRouter>
       <Div>
         <Routes>
-            <Route path="/" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
+        
         </Routes>
         <Sidebar />
         <Routes>

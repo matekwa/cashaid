@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Navbar from './Navbar';
 import Analytic from './Analytic';
 import Balance from './Balance';
 import History from './History';
 import Footer from './Footer';
+import axios from 'axios';
+import { baseURL } from '../utils/constant';
+
 function Dashboard() {
+    const [userData, setUserData] = useState({});
+    try {
+        axios.post(`${baseURL}/details`, window.localStorage.getItem('token'))
+            .then((res) => {
+                res.json();
+            }).then((data) => {
+                setUserData({ "userDetails": data });
+            });
+    }
+    catch (e) {
+        console.log(e);
+    }
     return (
         <Section>
             <div className="grid">

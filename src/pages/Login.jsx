@@ -10,6 +10,7 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [loginFail, setLoginFail] = useState("");
 
     const handleSignin = async (e) => {
         e.preventDefault();
@@ -34,9 +35,15 @@ const Login = () => {
                 password
             }
             try {
-                await axios.post(`${baseURL}/login`, userData).then(response => console.log(response.data));
-                setEmail('');
-                setPassword('');
+                await axios.post(`${baseURL}/login`, userData)
+                .then((response) => {
+                    if(response.data.status === "ok"){
+                        window.localStorage.setItem("token", response.data.data);
+                        window.location.href='../home';
+                    } else{
+                        setLoginFail(response.data.error);
+                    }
+                });
                 setErrors({});
             }
             catch (e) {
@@ -61,11 +68,16 @@ const Login = () => {
                         <h1>Sign in</h1>
                         <div className='inputelement'>
                             <label>Email</label>
-                            <input type="email" autoFocus placeholder='johndoe@example.com' name='email' id='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <input type="email" autoFocus placeholder='johndoe@example.com' name='email'  value={email} onChange={(e) => setEmail(e.target.value)} />
+                            {errors.email && <span className="error">{errors.email}</span>}
                         </div>
                         <div className='inputelement'>
                             <label>Password</label>
-                            <input type="password" name='password' id='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <input type="password" name='password'  value={password} onChange={(e) => setPassword(e.target.value)} />
+                            {errors.password && <span className="error">{errors.password}</span>}
+                        </div>
+                        <div>
+                            {loginFail && <small className="error">{loginFail}</small>}
                         </div>
                         <div className='rememberme'>
                             <p>Forgot Password</p>
