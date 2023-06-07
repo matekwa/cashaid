@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Navbar from './Navbar';
 import Analytic from './Analytic';
@@ -8,6 +8,7 @@ import Footer from './Footer';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
 
+export const detailsContext = React.createContext(); //Context for user details that will will be passed down to child components
 
 function Dashboard() {
     const token = sessionStorage.getItem('token');
@@ -20,35 +21,39 @@ function Dashboard() {
             try {
                 const res = axios.post(`${baseURL}/details`, { "token": token });
                 if (res) {
-                    const id = res.data.id;
-                    const email = res.data.email;
-                    const username = res.data.username;
+                    const userData = {
+                        'id': id = res.data.id,
+                        'email': res.data.email,
+                        'username': res.data.username,
+                    };
                 }
             }
             catch (e) {
-                console.log(e);
+                    console.log(e);
+                }
             }
-        }
     }
-    useEffect(() => {
-        getData();
-    }, []);
+        useEffect(() => {
+            getData();
+        }, []);
 
-    return (
-        <Section>
-            <div className="grid">
-                <Navbar />
-                <Analytic />
-                <Balance />
-                <History />
-                <Footer />
-            </div>
-        </Section>
-    );
-}
+        return (
+            <detailsContext.Provider value={userData}>
+                <Section>
+                    <div className="grid">
+                        <Navbar />
+                        <Analytic />
+                        <Balance />
+                        <History />
+                        <Footer />
+                    </div>
+                </Section>
+            </detailsContext.Provider>
+        );
+    }
 
-export default Dashboard
-const Section = styled.section`
+    export default Dashboard
+    const Section = styled.section`
 margin-left: 5vw;
 margin-right: 14px;
 padding: 2rem;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { BiWallet } from 'react-icons/bi';
 
@@ -15,9 +15,13 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import { detailsContext } from './Dashboard';
+
 function Notification() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const userDetails = useContext(detailsContext);
+
   const handleClick = (event ) => {
     setAnchorEl(event.currentTarget);
   };
@@ -43,7 +47,7 @@ function Notification() {
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
                         >
-                            <Avatar sx={{ width: 32, height: 32 }}>{email}</Avatar>
+                            <Avatar sx={{ width: 32, height: 32 }}>{userDetails.email}</Avatar>
                         </IconButton>
                     </Tooltip>
                 </Box>
