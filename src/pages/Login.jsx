@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import background from '../assets/background.jpg';
-import { IoMdArrowRoundForward } from 'react-icons/io';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
 
 
 const Login = () => {
+    const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
     const [loginFail, setLoginFail] = useState("");
+    const [email, setEmail] = useState("");
 
     const handleSignin = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         //Validations
         const validationErrors = {};
@@ -36,24 +37,34 @@ const Login = () => {
             }
             try {
                 await axios.post(`${baseURL}/login`, userData)
-                .then((response) => {
-                    if(response.data.status === "ok"){
-                        window.localStorage.setItem("token", response.data.data);
-                        window.location.href='../home';
-                    } else{
-                        setLoginFail(response.data.error);
-                    }
-                });
+                    .then((response) => {
+                        if (response.data.status === "ok") {
+                            sessionStorage.setItem("token", response.data.data);
+                            sessionStorage.setItem("isLoggedIn", 'true');
+                            setTimeout(() => {
+                                setLoading(false);
+                            }, 2000);
+                            window.location.href = '../dashboard';
+                        } else {
+                            setLoginFail(response.data.error);
+                            setLoading(false);
+                        }
+                    });
                 setErrors({});
             }
             catch (e) {
                 console.log(e);
+                setLoading(false);
             }
-        } else {
+        } else{
             // Form is invalid, update errors state
             setErrors(validationErrors);
+            setLoading(false);
         }
     }
+    useEffect(()=> {
+        document.title = 'Log in';
+    });
     return (
         <Section>
             <div>
@@ -64,16 +75,16 @@ const Login = () => {
             </header>
             <body>
                 <div className='logincard'>
-                    <form action='POST'>
+                    <form onSubmit={handleSignin}>
                         <h1>Sign in</h1>
                         <div className='inputelement'>
                             <label>Email</label>
-                            <input type="email" autoFocus placeholder='johndoe@example.com' name='email'  value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <input type="email" autoFocus placeholder='johndoe@example.com' name='email' value={email} onChange={(e) => setEmail(e.target.value)} />
                             {errors.email && <span className="error">{errors.email}</span>}
                         </div>
                         <div className='inputelement'>
                             <label>Password</label>
-                            <input type="password" name='password'  value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <input type="password" name='password' placeholder='*******' value={password} onChange={(e) => setPassword(e.target.value)} />
                             {errors.password && <span className="error">{errors.password}</span>}
                         </div>
                         <div>
@@ -83,7 +94,7 @@ const Login = () => {
                             <p>Forgot Password</p>
                         </div>
                         <div className='submitbutton'>
-                            <button type='submit' onClick={handleSignin}>Sign In &nbsp;<IoMdArrowRoundForward /> </button>
+                            <button type='submit'> {loading ? <Loader /> : 'Log In'}</button>
                         </div>
                     </form>
                 </div>
@@ -93,6 +104,25 @@ const Login = () => {
 }
 
 export default Login
+
+// Keyframe animation for loader
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+const Loader = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: ${rotate} 1s linear infinite;
+  margin-left: 45%;
+`;
 const Section = styled.section`
         .imagebg{
             height: 100vh;

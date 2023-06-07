@@ -1,4 +1,4 @@
-import React, { MouseEvent} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { BiWallet } from 'react-icons/bi';
 
@@ -16,7 +16,6 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 function Notification() {
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event ) => {
@@ -25,7 +24,10 @@ function Notification() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const handleLogout = () => {
+    sessionStorage.clear();
+    window.location.href = './auth/login'
+  }
     return (
         <Nav>
             <div className="notification">
@@ -41,7 +43,7 @@ function Notification() {
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
                         >
-                            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                            <Avatar sx={{ width: 32, height: 32 }}>{email}</Avatar>
                         </IconButton>
                     </Tooltip>
                 </Box>
@@ -96,7 +98,7 @@ function Notification() {
                         </ListItemIcon>
                         Settings
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={handleLogout}>
                         <ListItemIcon>
                             <Logout fontSize="small" />
                         </ListItemIcon>

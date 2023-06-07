@@ -19,30 +19,34 @@ import LoyaltyList from './Loyalty/Main';
 import Settings from './Settings/Main';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import ErrorPage  from './components/ErrorPage';
+
 function App() {
   return (
     <BrowserRouter>
       <Div>
         <Routes>
-            <Route path="/" element={<Login />} />
-        
+            <Route path="auth/verification" element={<EmailValidation />} />
+            <Route path="auth/login" element={<Login />} />
+            <Route path="auth/signup" element={<Signup />} />
         </Routes>
         <Sidebar />
         <Routes>
-          <Route path="home" element={<Home />} />
-          <Route path="transactions" element={<Transactions />} />
-          <Route path="scheduler" element={<EventScheduler />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="inventory-manager" element={<InventoryIndex />} />
-          <Route path="inventory-manager/add-business-name" element={<AddShop />} />
-          <Route path="inventory-manager/add-outlets" element={<Outlets />} />
-          <Route path="inventory-manager/user-roles" element={<AddUsers />} />
-          <Route path="inventory-manager/product-catalogue" element={<ProductCatalogue />} />
-          <Route path="inventory-manager/receipts" element={<Receipts />} />
-          <Route path="pos-terminal" element={<POS />} />
-          <Route path="link-card" element={<Card />} />
-          <Route path="loyal-customers" element={<LoyaltyList />} />
-          <Route path="settings" element={<Settings />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/dashboard" element={<Home />} />
+              <Route path="transactions" element={<Transactions />} />
+              <Route path="scheduler" element={<EventScheduler />} />
+              <Route path="analytics" element={<Analytics />} />
+              <Route path="inventory-manager" element={<InventoryIndex />} />
+              <Route path="inventory-manager/add-business-name" element={<AddShop />} />
+              <Route path="inventory-manager/add-outlets" element={<Outlets />} />
+              <Route path="inventory-manager/user-roles" element={<AddUsers />} />
+              <Route path="inventory-manager/product-catalogue" element={<ProductCatalogue />} />
+              <Route path="inventory-manager/receipts" element={<Receipts />} />
+              <Route path="pos-terminal" element={<POS />} />
+              <Route path="link-card" element={<Card />} />
+              <Route path="loyal-customers" element={<LoyaltyList />} />
+              <Route path="settings" element={<Settings />} />
         </Routes>
       </Div>
     </BrowserRouter>

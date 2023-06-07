@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import background from '../assets/background.jpg';
-import { IoMdArrowRoundForward } from 'react-icons/io';
-//import Login from './Login';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
-
 
 const Signup = () => {
     const [errors, setErrors] = useState({});
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
+    const [loading, setLoading] = useState(false);
 
     const handleSignUp = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
 
         //Validations
         const validationErrors = {};
@@ -47,16 +46,24 @@ const Signup = () => {
                 setPassword('');
                 setUsername('');
                 setErrors({});
+                setTimeout(() => {
+                    setLoading(false);
+                }, 2000);
+                window.location.href = '../auth/login';
             }
             catch (e) {
                 console.log(e);
-
+                setLoading(false);
             }
         } else {
             // Form is invalid, update errors state
             setErrors(validationErrors);
+            setLoading(false);
         }
     }
+    useEffect(()=>{
+        document.title = 'Sign up';
+    }, []);
     return (
         <Section>
             <div>
@@ -85,12 +92,10 @@ const Signup = () => {
                             {errors.password && <span className="error">{errors.password}</span>}
                         </div>
                         <div className='rememberme'>
-                            <Link to=''>
-                                <p>Have an account? Sign in</p>
-                            </Link>
+                            <p>Have an account? <Link to='auth/login'>Log in</Link></p>
                         </div>
                         <div className='submitbutton'>
-                            <button type='submit'>Submit &nbsp;<IoMdArrowRoundForward /> </button>
+                            <button type='submit'> {loading ? <Loader /> : 'Sign Up'}</button>
                         </div>
                     </form>
                 </div>
@@ -100,6 +105,24 @@ const Signup = () => {
 }
 
 export default Signup
+// Keyframe animation for loader
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+const Loader = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: ${rotate} 1s linear infinite;
+  margin-left: 45%;
+`;
 const Section = styled.section`
         .imagebg{
             height: 100vh;
@@ -179,7 +202,7 @@ const Section = styled.section`
                     cursor: pointer;
                     border-radius: 10px;
                     font-weight: bold;
-                    transition: .25s ease-in-out;
+                    transition: background-color 0.3s ease;
                 }
                 button: hover{
                     background: #0C2330;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Navbar from './Navbar';
 import Analytic from './Analytic';
@@ -8,19 +8,32 @@ import Footer from './Footer';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
 
+
 function Dashboard() {
-    const [userData, setUserData] = useState({});
-    try {
-        axios.post(`${baseURL}/details`, window.localStorage.getItem('token'))
-            .then((res) => {
-                res.json();
-            }).then((data) => {
-                setUserData({ "userDetails": data });
-            });
+    const token = sessionStorage.getItem('token');
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+
+    const getData = async () => {
+        if (isLoggedIn !== 'true') {
+            window.location.href = './auth/login';
+        } else {
+            try {
+                const res = axios.post(`${baseURL}/details`, { "token": token });
+                if (res) {
+                    const id = res.data.id;
+                    const email = res.data.email;
+                    const username = res.data.username;
+                }
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
     }
-    catch (e) {
-        console.log(e);
-    }
+    useEffect(() => {
+        getData();
+    }, []);
+
     return (
         <Section>
             <div className="grid">

@@ -1,11 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import background from '../assets/background.jpg';
 import { IoMdArrowRoundForward } from 'react-icons/io';
+import axios from 'axios';
+import { baseURL } from '../utils/constant';
 
 
 const Login = () => {
-    const [error, setError] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [email, setEmail] = useState("");
+
+    const handleClick = async (e) => {
+        e.preventDefault();
+
+        //Validations
+        const validationErrors = {};
+        if (!email) {
+            validationErrors.loginFail = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            validationErrors.loginFail = 'Invalid email address';
+        }
+        if (Object.keys(validationErrors).length === 0) {
+            // Form is valid, submit data to the server
+            const userData = {
+                email
+            }
+            try {
+                await axios.post(`${baseURL}/emailverification`, userData)
+                    .then((response) => {
+                        if (response.data.status === "ok") {
+                            window.location.href = '../auth/login';
+                        } else {
+                            window.location.href = '../auth/signup';
+                        }
+                    });
+                setErrors({});
+            }
+            catch (e) {
+                console.log(e);
+            }
+        } else {
+            // Form is invalid, update errors state
+            setErrors(validationErrors);
+        }
+    }
+    useEffect(()=> {
+        document.title = 'Get started';
+    });
     return (
         <Section>
             <div>
@@ -20,14 +61,15 @@ const Login = () => {
                         <h1>Manage All Your Cashless Payments From One Place </h1>
                         <h3 className='py-4'>Enter your Email to get started.</h3>
                     </div>
-                    <form>
+                    <form action='POST'>
                         <div className='inputelement'>
-                            <input type="text" placeholder='johndoe@example.com' value='' autoFocus />
+                            <input type="email" placeholder='johndoe@example.com' value={email} onChange={(e) => setEmail(e.target.value)} autoFocus />
                         </div>
                         <div>
-                            <button className='submitbutton'><IoMdArrowRoundForward /> </button>
+                            <button className='submitbutton' onClick={handleClick}><IoMdArrowRoundForward /> </button>
                         </div>
                     </form>
+                    {errors.email && <small className="error">{email}</small>}
                 </div>
             </body>
         </Section>
@@ -61,6 +103,12 @@ const Section = styled.section`
             top: 30%;
             left: 25%;
             right: 25%;
+
+            .error{
+                color: red;
+                width: 100%;
+                padding: 10px 5px;
+            }
         }
         .intro{
             color: gold;
@@ -69,6 +117,7 @@ const Section = styled.section`
             display: flex;
             margin: 10px auto;
             width: 100%;
+            gap: .5rem;
         
             
             .inputelement{
@@ -82,16 +131,24 @@ const Section = styled.section`
                 padding: 18px 15px;
                 width: 100%;
             }
-            .submitbutton{
-                background: #0C2340;
-                padding: 17px 15px;
-                color: gold;
-                border-radius: 5px;
-                border: 1px solid #F5F5FD;
+              button{
+              color: white;
+              background: #0C2340;
+              border: none;
+              font-size: 20px;
+              padding: 18px 5rem;
+              border: 1px solid #0C2340;
+              cursor: pointer;
+              transition: background-color 0.3s ease;
+
+              svg{
                 font-size: 20px;
-                margin-left: 2px;
-                cursor: pointer;
-            }
+                font-weight: bold;
+              }
+          }
+          button:hover{
+              background: black;
+          }
         }
 
 `;

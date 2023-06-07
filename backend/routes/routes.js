@@ -39,6 +39,19 @@ router.post("/login", async (req, res)=> {
     }
 });
 
+router.post("/emailverification", async (req, res)=> {
+    const { email } = req.body;
+
+    const user = await signUpTemplateCopy.findOne({email});
+    if(!user){
+        return res.json('No account with that email found');
+    }
+     else{
+        return res.json({status: "ok", data: 'User Found'});
+    }
+});
+
+
 router.post("/details", async (req, res)=>{
     const { token } = req.body;
     try{
@@ -47,7 +60,7 @@ router.post("/details", async (req, res)=>{
         signUpTemplateCopy.findOne({email: userEmail}).then((data)=>{res.json({status: "ok", data: data})}).catch((error)=>{res.json({status: "error", data: error})});
     }
     catch(error){
-
+        return res.json({status: "null", error: error})
     }
 })
 
