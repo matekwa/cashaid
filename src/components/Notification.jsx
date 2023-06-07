@@ -15,7 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import { detailsContext } from './Dashboard';
+import { detailsContext } from './Home';
 
 function Notification() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -47,7 +47,7 @@ function Notification() {
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
                         >
-                            <Avatar sx={{ width: 32, height: 32 }}>{userDetails.email}</Avatar>
+                            <Avatar sx={{ width: 32, height: 32 }}>{userDetails.email.charAt(0)}</Avatar>
                         </IconButton>
                     </Tooltip>
                 </Box>

@@ -19,7 +19,7 @@ import LoyaltyList from './Loyalty/Main';
 import Settings from './Settings/Main';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import ErrorPage  from './components/ErrorPage';
+//import ErrorPage  from './components/ErrorPage';
 
 function App() {
   return (
