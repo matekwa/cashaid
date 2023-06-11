@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const signUpTemplateCopy = require('../models/signupModels.js');
+const cashTransactionTemplate = require('../models/cashTransactionModel.js');
+const mpesaTransactionTemplate = require('../models/mpesaModel.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { createSearchParams } = require('react-router-dom');
 
 const JWT_SECRET = 'Ra./"hmsjhmj2@92mm9290()jk82.290/o2F9%Y68][]jkh&mk';
 
@@ -52,16 +53,26 @@ router.post("/emailverification", async (req, res)=> {
 });
 
 
-router.post("/details", async (req, res)=>{
-    const { token } = req.body;
+router.post('/details', async (req, res) => {
+  const { token } = req.body;
+  try {
+    const user = jwt.verify(token, JWT_SECRET);
+    const userEmail = user.email;
+    const data = await signUpTemplateCopy.findOne({ email: userEmail });
+    res.json({ status: 'ok', data: data });
+  } catch (error) {
+    res.json({ status: 'error', error: error });
+  }
+});
+
+router.post("/transaction_analytics", async (req, res)=>{
+    const { business_id } = req.body;
     try{
-        const user = jwt.verify(token, JWT_SECRET);
-        const userEmail = user.email;
-        signUpTemplateCopy.findOne({email: userEmail}).then((data)=>{res.json({status: "ok", data: data})}).catch((error)=>{res.json({status: "error", data: error})});
+         await mpesaTransactionTemplate.find({business_id}).then((data)=>{res.json({status: "ok", data: data})}).catch((error)=>{res.json({status: "error", data: error})});
     }
     catch(error){
-        return res.json({status: "null", error: error})
+        return res.json({status: "Something went wrong", error: error});
     }
-})
+});
 
 module.exports = router;

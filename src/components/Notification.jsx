@@ -1,6 +1,7 @@
-import React, { useContext } from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 import { BiWallet } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -15,29 +16,38 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import { detailsContext } from './Home';
 
-function Notification() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const userDetails = useContext(detailsContext);
+const Nav = styled.nav`
+  display: flex;
+  justify-content: right;
+`;
 
-  const handleClick = (event ) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleLogout = () => {
-    sessionStorage.clear();
-    window.location.href = './auth/login'
-  }
+function Notification(props) {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const userName = props.data.username;
+    const avater = userName.charAt(0);
+    const navigate = useNavigate();
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    const handleLogout = () => {
+        sessionStorage.clear();
+        window.location.href = '/auth/login';
+    };
+
     return (
         <Nav>
             <div className="notification">
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                    <Typography sx={{ minWidth: 100}}>Help</Typography>
-                    <Typography sx={{ minWidth: 100, fontSize: 25 }}><BiWallet /></Typography>
+                    <Typography sx={{ minWidth: 100 }}>Help</Typography>
+                    <Typography sx={{ minWidth: 100, fontSize: 25 }}>
+                        <BiWallet />
+                    </Typography>
                     <Tooltip title="Account settings">
                         <IconButton
                             onClick={handleClick}
@@ -47,7 +57,7 @@ function Notification() {
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
                         >
-                            <Avatar sx={{ width: 32, height: 32 }}>{userDetails.email.charAt(0)}</Avatar>
+                            <Avatar sx={{ width: 32, height: 32 }}>{avater}</Avatar>
                         </IconButton>
                     </Tooltip>
                 </Box>
@@ -111,13 +121,7 @@ function Notification() {
                 </Menu>
             </div>
         </Nav>
-    )
+    );
 }
 
-export default Notification
-const Nav = styled.nav`
-display: flex;
-justify-content: right;
-
-`
-;
+export default Notification;

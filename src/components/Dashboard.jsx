@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Navbar from './Navbar';
 import Analytic from './Analytic';
@@ -6,12 +6,12 @@ import Balance from './Balance';
 import History from './History';
 import Footer from './Footer';
 
-function Dashboard() {
+function Dashboard(props) {
     return (
         <Section>
             <div className="grid">
                 <Navbar />
-                <Analytic />
+                <Analytic {...props} />
                 <Balance />
                 <History />
                 <Footer />

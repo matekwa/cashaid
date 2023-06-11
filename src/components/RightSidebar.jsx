@@ -5,12 +5,12 @@ import Card from './Card';
 import Activity from './Activity';
 import Payment from './Payment';
 import AddCard from './AddCard';
-function RightSidebar() {
+function RightSidebar(props) {
     const [cardPresent, setCardPresent] = React.useState(true);
     return (
         <Section>
             <div className="grid">
-                <Notification />
+                <Notification {...props} />
                 {cardPresent === true ? <Card /> : <AddCard />}
                 <Activity />
                 <Payment />

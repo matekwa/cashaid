@@ -1,9 +1,6 @@
-POST http://localhost:5000/auth/signup
+POST http://localhost:5000/auth/details
 content-Type: application/json
 
 {
-    "email" : "matekwa@gmail.com",
-    "username": "Ronn",
-    "password": "pass",
-    "phoneNumber": "0756767"
+    "token" :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvbmFsZEBnbWFpbC5jb20iLCJpYXQiOjE2ODY0OTI0MTV9.iOas9quRPqMWB5-Gq89LDroWaxiCuTCXK2A4XeeG-JY";
 }

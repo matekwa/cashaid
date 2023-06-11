@@ -14,6 +14,21 @@ const signUpTemplate = new mongoose.Schema({
         type: String,
         required: true
     },
+    mpesa_transactions: {
+        type: Number,
+        require: true,
+        default: 0
+    },
+    credit_card_transactions: {
+        type: Number,
+        require: true,
+        default: 0
+    },
+    cash_transactions: {
+        type: Number,
+        require: true,
+        default: 0
+    },
     date: {
         type: Date,
         default: Date.now

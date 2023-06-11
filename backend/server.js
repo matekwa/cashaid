@@ -6,7 +6,7 @@ const routeURL = require('./Routes/routes');
 const cors = require('cors');
 
 dotenv.config();
-mongoose.connect(process.env.MONGO_URI).then(() => console.log('Mongo database connected successfully')).catch((error)=> console.log(error));
+mongoose.connect(process.env.MONGO_URI).then(() => console.log('MongoDb connected successfully')).catch((error)=> console.log(error));
 
 app.use(express.json()); // Body-parser as a middleware
 app.use(cors());

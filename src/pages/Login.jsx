@@ -56,14 +56,14 @@ const Login = () => {
                 console.log(e);
                 setLoading(false);
             }
-        } else{
+        } else {
             // Form is invalid, update errors state
             setErrors(validationErrors);
             setLoading(false);
         }
     }
-    useEffect(()=> {
-        document.title = 'Log in';
+    useEffect(() => {
+        document.title = 'StockySapce | Log in';
     });
     return (
         <Section>
@@ -127,7 +127,7 @@ const Section = styled.section`
         .imagebg{
             height: 100vh;
             width: 100%;
-            opacity: 80%;
+            opacity: 0.8;
             overflow-y: hidden;
         }
         header{
@@ -156,7 +156,7 @@ const Section = styled.section`
             padding: 25px;
             background-color: #F5F5FD;
             border-radius: 15px;
-            font-familly: 'Source Sans Pro', sans-serif;
+            font-family: 'Source Sans Pro', sans-serif;
             h1{
                 margin: 10px 0;
                 color: #0C2340;
@@ -204,7 +204,7 @@ const Section = styled.section`
                     font-weight: bold;
                     transition: .25s ease-in-out;
                 }
-                button: hover{
+                button:hover{
                     background: #0C2330;
                 }
             }
