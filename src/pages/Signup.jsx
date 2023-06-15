@@ -62,7 +62,7 @@ const Signup = () => {
         }
     }
     useEffect(()=>{
-        document.title = 'Sign up';
+        document.title = 'StockySpace - Sign up';
     }, []);
     return (
         <Section>

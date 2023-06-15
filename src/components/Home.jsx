@@ -4,34 +4,42 @@ import Dashboard from './Dashboard';
 import RightSidebar from './RightSidebar';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
+import Sidebar from './Sidebar';
 
 const Home = () => {
-  const token = sessionStorage.getItem('token');
-  const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-  const [data, setData] = useState({});
+
+  const [userData, setUsertData] = useState({});
   const navigate = useNavigate();
 
+
   useEffect(() => {
-    if (isLoggedIn !== 'true') {
-      window.location.href = '/auth/login';
-    } else {
-      const fetchData = async () => {
-        try {
-          const response = await axios.post(`${baseURL}/details`, { token });
-          setData(response.data);
-        } catch (error) {
-          console.log('Error fetching data', error);
-        }
-      };
+    const token = window.localStorage.getItem("token");
+
+    const tokenObj = {
+      token
+    };
+
+    const fetchData = async () => {
+      try {
+        await axios.post(`${baseURL}/details`, tokenObj).then((response) => { setUsertData(response.data.data) }).catch((error) => { console.log(error) });
+      } catch (error) {
+        console.log('Errrrror fetching data', error);
+      }
+    };
+
+    if (token) {
       fetchData();
     }
-  }, [token, isLoggedIn]);
+  }, []);
 
   return (
-    <div>
-      <Dashboard {...data} />
-      <RightSidebar {...data} />
-    </div>
+    Object.keys(userData).length > 0 && (
+      <>
+        <Sidebar />
+        <Dashboard {...userData} />
+        <RightSidebar {...userData} />
+      </>
+    )
   );
 };
 

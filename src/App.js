@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'; 
 import styled from 'styled-components';
-import Sidebar from './components/Sidebar'
 import Home from './components/Home'
 import EmailValidation from './pages/EmailValidation';
 import Transactions from './components/Transactions';
@@ -19,20 +18,18 @@ import LoyaltyList from './Loyalty/Main';
 import Settings from './Settings/Main';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-//import ErrorPage  from './components/ErrorPage';
+import ErrorPage  from './components/ErrorPage';
 
 function App() {
+  const loggedIn = window.localStorage.getItem('isLoggedIn');
   return (
     <BrowserRouter>
       <Div>
         <Routes>
-            <Route path="auth/verification" element={<EmailValidation />} />
-            <Route path="auth/login" element={<Login />} />
-            <Route path="auth/signup" element={<Signup />} />
-        </Routes>
-        <Sidebar />
-        <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={loggedIn ? <Home /> : <Login />} />
+              <Route path="auth/verification" element={<EmailValidation />} />
+              <Route path="auth/login" element={<Login />} />
+              <Route path="auth/signup" element={<Signup />} />
               <Route path="/dashboard" element={<Home />} />
               <Route path="transactions" element={<Transactions />} />
               <Route path="scheduler" element={<EventScheduler />} />
@@ -47,6 +44,7 @@ function App() {
               <Route path="link-card" element={<Card />} />
               <Route path="loyal-customers" element={<LoyaltyList />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Div>
     </BrowserRouter>

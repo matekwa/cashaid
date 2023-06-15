@@ -94,6 +94,55 @@ align-items: center;
 justify-content: space-between;
 padding: 2rem 0;
 gap: 2rem;
+
+  @media (max-width: 768px) {
+    width: 100vw;
+    flex-direction: row;
+    padding: 1rem;
+    gap: 0;
+    height: auto;
+    
+    .top {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 1rem;
+      width: 100%;
+      align-items: center;
+      
+      .brand {
+        padding: 0;
+      }
+      
+      .settings {
+        position: static;
+        margin-bottom: 0;
+      }
+    }
+    
+    .links {
+      ul {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0;
+        justify-content: center;
+        
+        li {
+          margin: 0;
+          border-right: none;
+          
+          .noti {
+            margin-left: 0;
+            
+            span {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+
 .top{
     display: flex;
     flex-direction: column;
@@ -164,7 +213,6 @@ gap: 2rem;
         }
     }
 }
-
-
 `
+
     ;

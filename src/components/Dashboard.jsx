@@ -11,7 +11,7 @@ function Dashboard(props) {
         <Section>
             <div className="grid">
                 <Navbar />
-                <Analytic {...props} />
+                <Analytic { ...props} />
                 <Balance />
                 <History />
                 <Footer />

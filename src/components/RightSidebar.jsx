@@ -10,7 +10,7 @@ function RightSidebar(props) {
     return (
         <Section>
             <div className="grid">
-                <Notification {...props} />
+                <Notification { ...props} />
                 {cardPresent === true ? <Card /> : <AddCard />}
                 <Activity />
                 <Payment />

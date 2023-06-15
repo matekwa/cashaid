@@ -3,6 +3,7 @@ const router = express.Router();
 const signUpTemplateCopy = require('../models/signupModels.js');
 const cashTransactionTemplate = require('../models/cashTransactionModel.js');
 const mpesaTransactionTemplate = require('../models/mpesaModel.js');
+const creditCardTransactionTemplate = require('../models/creditCardModel.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -25,7 +26,7 @@ router.post("/login", async (req, res)=> {
 
     const user = await signUpTemplateCopy.findOne({email});
     if(!user){
-        return res.json('No account with that email found');
+        return res.json('No account with that email was found');
     }
     if(await bcrypt.compare(password, user.password)){
         const token = jwt.sign({email:user.email}, JWT_SECRET);
@@ -54,21 +55,38 @@ router.post("/emailverification", async (req, res)=> {
 
 
 router.post('/details', async (req, res) => {
-  const { token } = req.body;
+  const { token } = req.body; //Obtain token from request body
   try {
-    const user = jwt.verify(token, JWT_SECRET);
-    const userEmail = user.email;
-    const data = await signUpTemplateCopy.findOne({ email: userEmail });
-    res.json({ status: 'ok', data: data });
+    const user = jwt.verify(token, JWT_SECRET); //Authenticate the token with JWT_SECRET - If valid then returns an object with email value
+    const email = user.email;
+    await signUpTemplateCopy.findOne({ email }).then((data)=>{res.json({status:"ok", data:data})}).catch((error)=> {res.json({status:"error", error: error})});
   } catch (error) {
     res.json({ status: 'error', error: error });
   }
 });
 
-router.post("/transaction_analytics", async (req, res)=>{
+router.post("/fetchMpesaTrans", async (req, res)=>{
     const { business_id } = req.body;
     try{
          await mpesaTransactionTemplate.find({business_id}).then((data)=>{res.json({status: "ok", data: data})}).catch((error)=>{res.json({status: "error", data: error})});
+    }
+    catch(error){
+        return res.json({status: "Something went wrong", error: error});
+    }
+});
+router.post("/fetchCreditCardTrans", async (req, res)=>{
+    const { business_id } = req.body;
+    try{
+         await creditCardTransactionTemplate.find({business_id}).then((data)=>{res.json({status: "ok", data: data})}).catch((error)=>{res.json({status: "error", data: error})});
+    }
+    catch(error){
+        return res.json({status: "Something went wrong", error: error});
+    }
+});
+router.post("/fetchCashTrans", async (req, res)=>{
+    const { business_id } = req.body;
+    try{
+         await cashTransactionTemplate.find({business_id}).then((data)=>{res.json({status: "ok", data: data})}).catch((error)=>{res.json({status: "error", data: error})});
     }
     catch(error){
         return res.json({status: "Something went wrong", error: error});

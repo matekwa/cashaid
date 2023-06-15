@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GrTransaction } from 'react-icons/gr';
 import { FcPositiveDynamic } from 'react-icons/fc';
@@ -9,8 +9,49 @@ import axios from 'axios';
 import { baseURL } from '../utils/constant';
 
 function Analytic(props) {
-    const [transactionsData, setTransactionsData] = useState({});
-    console.log(props);
+    const [revenue, setRevenue] = useState(0);
+    const [transactionsNo, setTransactionsNo] = useState(0);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const business_id = props._id;
+                const no_of_transactions = +props.mpesa_transactions + +props.cash_transactions + +props.credit_card_transactions; //I'm using unary operator
+                setTransactionsNo(no_of_transactions);
+
+                const mpesaTrans = (await axios.post(`${baseURL}/fetchMpesaTrans`, { business_id })).data.data;
+                const creditCardTrans = (await axios.post(`${baseURL}/fetchCreditCardTrans`, { business_id })).data.data;
+                const cashTrans = (await axios.post(`${baseURL}/fetchCashTrans`, { business_id })).data.data;
+
+
+                let mpesaSum = 0;
+                if (mpesaTrans.length !== 0) {
+                    const mpesaAmounts = mpesaTrans.map(item => item.TransAmount);
+                    mpesaSum = mpesaAmounts.reduce((total, amount) => total + amount, 0);
+                };
+                let creditCardSum = 0;
+                if (creditCardTrans.length !== 0) {
+                    const creditCardAmounts = creditCardTrans.map(item => item.TransAmount);
+                    creditCardSum = creditCardAmounts.reduce((total, amount) => total + amount, 0);
+                };
+                let cashSum = 0;
+                if (cashTrans.length !== 0) {
+                    const cashAmounts = cashTrans.map(item => item.TransAmount);
+                    cashSum = cashAmounts.reduce((total, amount) => total + amount, 0);
+                };
+                const dailyRevenue = cashSum + mpesaSum + creditCardSum;
+                const formattedRevenue = dailyRevenue.toLocaleString(undefined, {
+                    style: 'currency',
+                    currency: 'KES', // Adjust the currency code as needed
+                });
+                setRevenue(formattedRevenue);
+            } catch (error) {
+                console.log('Error fetching data', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     return (
         <Section>
@@ -24,7 +65,7 @@ function Analytic(props) {
                     <h6>Revenue</h6>
                 </div>
                 <div className="money">
-                    <h5>KES 12,000</h5>
+                    <h5>{`${revenue}`}</h5>
                 </div>
             </div>
             <div className="analytic">
@@ -64,7 +105,7 @@ function Analytic(props) {
                         <h6>Transactions</h6>
                     </div>
                     <div className="money">
-                        <h5>5</h5>
+                        <h5>{transactionsNo}</h5>
                     </div>
                 </Link>
             </div>

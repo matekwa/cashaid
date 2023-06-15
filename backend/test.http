@@ -1,6 +1,6 @@
-POST http://localhost:5000/auth/details
+POST http://localhost:5000/api/fetchCreditCardTrans
 content-Type: application/json
 
 {
-    "token" :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJvbmFsZEBnbWFpbC5jb20iLCJpYXQiOjE2ODY0OTI0MTV9.iOas9quRPqMWB5-Gq89LDroWaxiCuTCXK2A4XeeG-JY";
+    "business_id": "6484fa683821a7533bb96feb"
 }

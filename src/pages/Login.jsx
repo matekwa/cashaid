@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import background from '../assets/background.jpg';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
+import { Link } from 'react-router-dom';
 
 
 const Login = () => {
@@ -39,8 +40,8 @@ const Login = () => {
                 await axios.post(`${baseURL}/login`, userData)
                     .then((response) => {
                         if (response.data.status === "ok") {
-                            sessionStorage.setItem("token", response.data.data);
-                            sessionStorage.setItem("isLoggedIn", 'true');
+                            window.localStorage.setItem("token", response.data.data);
+                            window.localStorage.setItem("isLoggedIn", "true");
                             setTimeout(() => {
                                 setLoading(false);
                             }, 2000);
@@ -53,7 +54,9 @@ const Login = () => {
                 setErrors({});
             }
             catch (e) {
-                console.log(e);
+                if (e.code === "ERR_NETWORK") {
+                    setLoginFail('You are not connect to internet');
+                }
                 setLoading(false);
             }
         } else {
@@ -92,6 +95,9 @@ const Login = () => {
                         </div>
                         <div className='rememberme'>
                             <p>Forgot Password</p>
+                            <Link to='/auth/signup'>
+                                <p>Sign up</p>
+                            </Link>
                         </div>
                         <div className='submitbutton'>
                             <button type='submit'> {loading ? <Loader /> : 'Log In'}</button>
@@ -148,6 +154,12 @@ const Section = styled.section`
             top: 25%;
             left: 25%;
             right: 25%;
+
+            @media (max-width: 600px) {
+                top: 10%;
+                left: 10%;
+                right: 10%;
+            }
         }
         form{
             max-width: 400px;
@@ -189,6 +201,7 @@ const Section = styled.section`
                 justify-content: space-between;
                 margin: 5px 0;
                 color: #0C2340;
+                text-decoration: none;
             }
             .submitbutton{
                 button{ 
@@ -207,6 +220,19 @@ const Section = styled.section`
                 button:hover{
                     background: #0C2330;
                 }
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+            font-size: 20px;
+            margin-left: 10px;
+            }
+            
+            .logincard {
+            top: 15%;
+            left: 15%;
+            right: 15%;
             }
         }
 

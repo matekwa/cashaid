@@ -25,7 +25,7 @@ const Nav = styled.nav`
 function Notification(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
-    const userName = props.data.username;
+    const userName = props.username;
     const avater = userName.charAt(0);
     const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ function Notification(props) {
         setAnchorEl(null);
     };
     const handleLogout = () => {
-        sessionStorage.clear();
+        window.localStorage.clear();
         window.location.href = '/auth/login';
     };
 

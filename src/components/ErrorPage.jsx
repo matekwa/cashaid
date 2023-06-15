@@ -1,29 +1,41 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom'
+import errorImage from '../assets/404.jpg';
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f0f0f0;
+`;
+
+const ErrorImage = styled.img`
+  width: 200px;
+  height: 200px;
+`;
+
+const ErrorMessage = styled.h1`
+  font-size: 24px;
+  margin-top: 20px;
+`;
+
+const HomeLink = styled.a`
+  margin-top: 20px;
+  color: #333;
+  text-decoration: none;
+`;
 
 const ErrorPage = () => {
   return (
-    <Section>
-        <p>404 ERROR: Page not found</p>
-        <Link to='./home'>
-            Go back
-        </Link>
-    </Section>
-  )
-}
+    <Wrapper>
+      <ErrorImage src={ errorImage } alt="Error" />
+      <ErrorMessage>Page not found</ErrorMessage>
+      <HomeLink href="/">Go back to homepage</HomeLink>
+    </Wrapper>
+  );
+};
 
-export default ErrorPage
-const Section = styled.section`
-    heigt: 100vh;
-    width: 100%;
-    background: #F5F5FD;
-    color: black;
-    font-size: 18px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`
-;
+export default ErrorPage;
