@@ -4,7 +4,6 @@ import Dashboard from './Dashboard';
 import RightSidebar from './RightSidebar';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
-import Sidebar from './Sidebar';
 
 const Home = () => {
 
@@ -35,7 +34,6 @@ const Home = () => {
   return (
     Object.keys(userData).length > 0 && (
       <>
-        <Sidebar />
         <Dashboard {...userData} />
         <RightSidebar {...userData} />
       </>

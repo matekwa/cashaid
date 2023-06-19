@@ -2,14 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import Receipt from './Receipt';
 import Products from './Products';
+import Sidebar from '../components/Sidebar';
 const Darshboard = () => {
   return (
-    <Section>
-      <div className='grid'>
-        <Receipt />
-        <Products />
-      </div>
-    </Section>
+    <>
+      <Sidebar />
+      <Section>
+        <div className='grid'>
+          <Receipt />
+          <Products />
+        </div>
+      </Section>
+    </>
   )
 }
 

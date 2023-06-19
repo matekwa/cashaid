@@ -1,16 +1,21 @@
+
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GrTransaction } from 'react-icons/gr';
 import { FcPositiveDynamic } from 'react-icons/fc';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { GiPayMoney } from 'react-icons/gi';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
+import Splashscreen from './Splashscreen';
 
 function Analytic(props) {
     const [revenue, setRevenue] = useState(0);
     const [transactionsNo, setTransactionsNo] = useState(0);
+    const [combinedTransactions, setCombinedTransactions] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -22,28 +27,34 @@ function Analytic(props) {
                 const creditCardTrans = (await axios.post(`${baseURL}/fetchCreditCardTrans`, { business_id })).data.data;
                 const cashTrans = (await axios.post(`${baseURL}/fetchCashTrans`, { business_id })).data.data;
 
-
                 let mpesaSum = 0;
                 if (mpesaTrans.length !== 0) {
                     const mpesaAmounts = mpesaTrans.map(item => item.TransAmount);
                     mpesaSum = mpesaAmounts.reduce((total, amount) => total + amount, 0);
-                };
+                }
+
                 let creditCardSum = 0;
                 if (creditCardTrans.length !== 0) {
                     const creditCardAmounts = creditCardTrans.map(item => item.TransAmount);
                     creditCardSum = creditCardAmounts.reduce((total, amount) => total + amount, 0);
-                };
+                }
+
                 let cashSum = 0;
                 if (cashTrans.length !== 0) {
                     const cashAmounts = cashTrans.map(item => item.TransAmount);
                     cashSum = cashAmounts.reduce((total, amount) => total + amount, 0);
-                };
+                }
+
                 const dailyRevenue = cashSum + mpesaSum + creditCardSum;
                 const formattedRevenue = dailyRevenue.toLocaleString(undefined, {
                     style: 'currency',
                     currency: 'KES', // Adjust the currency code as needed
                 });
                 setRevenue(formattedRevenue);
+
+                const combined = [...mpesaTrans, ...cashTrans, ...creditCardTrans];  //spread operator to combine the arrays and returns a single array with all the transaction objects
+                setCombinedTransactions(combined);
+                setIsLoading(false);
             } catch (error) {
                 console.log('Error fetching data', error);
             }
@@ -52,63 +63,68 @@ function Analytic(props) {
         fetchData();
     }, []);
 
+    const queryParam = new URLSearchParams({ dailyTransactions: JSON.stringify(combinedTransactions) }).toString();
 
     return (
         <Section>
-            <div className="analytic">
-                <div className="design">
-                    <div className="logo">
-                        <GiReceiveMoney />
-                    </div>
-                </div>
-                <div className="transfer">
-                    <h6>Revenue</h6>
-                </div>
-                <div className="money">
-                    <h5>{`${revenue}`}</h5>
-                </div>
-            </div>
-            <div className="analytic">
-                <div className="design">
-                    <div className="logo">
-                        <GiPayMoney />
-                    </div>
-                </div>
-                <div className="transfer">
-                    <h6>Expense</h6>
-                </div>
-                <div className="money">
-                    <h5>KES 1,200</h5>
-                </div>
-            </div>
-            <div className="analytic">
-                <div className="design">
-                    <div className="logo">
-                        <FcPositiveDynamic />
-                    </div>
-                </div>
-                <div className="transfer">
-                    <h6>Profit Margin</h6>
-                </div>
-                <div className="money">
-                    <h5>KES 500</h5>
-                </div>
-            </div>
-            <div className="analytic">
-                <Link to="transactions" className="link">
-                    <div className="design">
-                        <div className="logo">
-                            <GrTransaction />
+            {isLoading ? (<Splashscreen />) : (
+                <>
+                    <div className="analytic">
+                        <div className="design">
+                            <div className="logo">
+                                <GiReceiveMoney />
+                            </div>
+                        </div>
+                        <div className="transfer">
+                            <h6>Revenue</h6>
+                        </div>
+                        <div className="money">
+                            <h5>{revenue}</h5>
                         </div>
                     </div>
-                    <div className="transfer">
-                        <h6>Transactions</h6>
+                    <div className="analytic">
+                        <div className="design">
+                            <div className="logo">
+                                <GiPayMoney />
+                            </div>
+                        </div>
+                        <div className="transfer">
+                            <h6>Expense</h6>
+                        </div>
+                        <div className="money">
+                            <h5>KES 1,200</h5>
+                        </div>
                     </div>
-                    <div className="money">
-                        <h5>{transactionsNo}</h5>
+                    <div className="analytic">
+                        <div className="design">
+                            <div className="logo">
+                                <FcPositiveDynamic />
+                            </div>
+                        </div>
+                        <div className="transfer">
+                            <h6>Profit Margin</h6>
+                        </div>
+                        <div className="money">
+                            <h5>KES 500</h5>
+                        </div>
                     </div>
-                </Link>
-            </div>
+                    <div className="analytic">
+                        <Link to={{ pathname: "/transactions", search: queryParam }} className="link">
+                            <div className="design">
+                                <div className="logo">
+                                    <GrTransaction />
+                                </div>
+                            </div>
+                            <div className="transfer">
+                                <h6>Transactions</h6>
+                            </div>
+                            <div className="money">
+                                <h5>{transactionsNo}</h5>
+                            </div>
+                        </Link>
+                    </div>
+                </>
+            )}
         </Section>
     );
 }

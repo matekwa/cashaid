@@ -2,6 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { DataManager, WebApiAdaptor } from '@syncfusion/ej2-data';
 import { Inject, ScheduleComponent, Day, Week, Month, Agenda, EventSettings } from '@syncfusion/ej2-react-schedule'
+import Sidebar from './Sidebar';
 
 const EventScheduler = () => {
 
@@ -12,17 +13,20 @@ const EventScheduler = () => {
      });
 
     return (
-        <Section>
-            <div className='heading'>
-                <h3>Upcoming Payments</h3>
-            </div>
-            <div className='Scheduler'>
-                <ScheduleComponent currentView='Month' EventSettings={remoteData}>
-                    
-                    <Inject services={[Day, Week, Month, Agenda]} />
-                </ScheduleComponent>
-            </div>
-        </Section>
+        <>
+            <Sidebar />
+            <Section>
+                <div className='heading'>
+                    <h3>Upcoming Payments</h3>
+                </div>
+                <div className='Scheduler'>
+                    <ScheduleComponent currentView='Month' EventSettings={remoteData}>
+                        
+                        <Inject services={[Day, Week, Month, Agenda]} />
+                    </ScheduleComponent>
+                </div>
+            </Section>
+        </>
     )
 }
 

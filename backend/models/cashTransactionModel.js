@@ -1,6 +1,15 @@
 const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
+    business_id: {
+    type: String,
+    required: true
+  },
+  transaction_type: {
+    type: String,
+    required: true,
+    default: "Cash"
+  },
   TransTime: {
     type: Date,
     required: true,
@@ -10,7 +19,7 @@ const transactionSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  PhoneNumber: {
+  MSISDN: {
     type: String,
     required: true
   },
@@ -27,9 +36,10 @@ const transactionSchema = new mongoose.Schema({
       required: true
     }
   },
-  business_id: {
+  status: {
     type: String,
-    required: true
+    required: true,
+    default: "completed"
   }
 });
 

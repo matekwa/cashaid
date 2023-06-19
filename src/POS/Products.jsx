@@ -1,131 +1,131 @@
 import React from 'react'
 import styled from 'styled-components';
 import { BiSearch } from 'react-icons/bi'
-import { AiOutlineScan  } from 'react-icons/ai';
+import { AiOutlineScan } from 'react-icons/ai';
 
 const Products = () => {
-  return (
-    <Section>
-          <div className="search">
-              <BiSearch />
-              <input type="text" placeholder="Search item" />
-              <AiOutlineScan />
-          </div>
-          <div className="products">
-            <div className='item'>
-                <button>Breakfast</button>
+    return (
+        <Section>
+            <div className="search">
+                <BiSearch />
+                <input type="text" placeholder="Search item" />
+                <AiOutlineScan />
             </div>
-            <div className='item'>
-                <button>Lunch</button>
+            <div className="products">
+                <div className='item'>
+                    <button>Breakfast</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Dinner & Breakfast</button>
+                </div>
+                <div className='item'>
+                    <button>Drinks</button>
+                </div>
+                <div className='item'>
+                    <button>Chrome</button>
+                </div>
+                <div className='item'>
+                    <button>Chrome</button>
+                </div>
+                <div className='item'>
+                    <button>Chrome</button>
+                </div>
+                <div className='item'>
+                    <button>Chrome</button>
+                </div>
+                <div className='item'>
+                    <button>Chrome</button>
+                </div>
+                <div className='item'>
+                    <button>Chrome</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
+                <div className='item'>
+                    <button>Lunch</button>
+                </div>
             </div>
-            <div className='item'>
-                <button>Lunch</button>
-            </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-            <div className='item'>
-                <button>Dinner & Breakfast</button>
-            </div>
-            <div className='item'>
-                <button>Drinks</button>
-            </div>
-            <div className='item'>
-                <button>Chrome</button>
-            </div>
-              <div className='item'>
-                  <button>Chrome</button>
-              </div>
-              <div className='item'>
-                  <button>Chrome</button>
-              </div>
-              <div className='item'>
-                  <button>Chrome</button>
-              </div>
-              <div className='item'>
-                  <button>Chrome</button>
-              </div>
-              <div className='item'>
-                  <button>Chrome</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-              <div className='item'>
-                  <button>Lunch</button>
-              </div>
-          </div>
-    </Section>
-  )
+        </Section>
+    )
 }
 
 export default Products
@@ -169,6 +169,7 @@ padding: 1rem;
         grid-template-columns: repeat(7, 1fr);
         gap: 10px;
 
+
         .item{
             button{
                 width: 9rem;
@@ -190,4 +191,4 @@ padding: 1rem;
         }
     }
 `
-;
+    ;

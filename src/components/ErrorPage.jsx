@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 100vh;
   width: 100vw;
-  background-color: #f0f0f0;
+  background-color: white;
 `;
 
 const ErrorImage = styled.img`

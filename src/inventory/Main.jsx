@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import business from '../assets/business.jpg';
 import outlet from '../assets/outlet.jpg';
@@ -7,12 +7,46 @@ import receipt from '../assets/receipt.jpg';
 import users from '../assets/users.jpg';
 import done from '../assets/done.jpg';
 import { Link } from 'react-router-dom';
+import Splashscreen from '../components/Splashscreen';
+import axios from 'axios';
+import { baseURL } from '../utils/constant';
+import Sidebar from '../components/Sidebar';
 
-const index = () => {
+const Index = () => {
+    const [userData, setUsertData] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const token = window.localStorage.getItem("token");
+
+        const tokenObj = {
+            token
+        };
+
+        const fetchData = async () => {
+            try {
+                await axios.post(`${baseURL}/details`, tokenObj).then((response) => { setUsertData(response.data.data) }).catch((error) => { console.log(error) });
+                setIsLoading(false);
+            } catch (error) {
+                console.log('Errrrror fetching data', error);
+            }
+        };
+
+        if (token) {
+            fetchData();
+        }
+    }, []);
+
+    const shopNameParam = new URLSearchParams({ bus_id: JSON.stringify(userData._id) }).toString();
+
     return (
+        <>
+        <Sidebar />
         <Section>
+            {isLoading ? (<Splashscreen />) : (
+                <>
             <div className="heading">
-                <h1>Hello Ronald, Set up your Business to get started.</h1>
+                <h1>Hello {userData.username}, Set up your Business to get started.</h1>
                 <p>Just follow our lead</p>
             </div>
             <div className="grid">
@@ -25,7 +59,7 @@ const index = () => {
                         <p>Add a name for your business to easily identify you from other businesses.</p>
                     </div>
                     <div className="button">
-                        <Link to='add-business-name'>
+                        <Link to={{ pathname: "/add-business-name", search: shopNameParam }}>
                             <button>Add Shop</button>
                         </Link>
                     </div>
@@ -99,11 +133,14 @@ const index = () => {
                     </div>
                 </div>
             </div>
+                </>
+            )}
         </Section>
+        </>
     )
 }
 
-export default index
+export default Index
 const Section = styled.section`
 
     margin-left: 5vw;

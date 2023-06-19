@@ -5,6 +5,11 @@ const transactionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  transaction_type: {
+    type: String,
+    required: true,
+    default: "Credit Card"
+  },
   TransID: {
     type: String,
     required: true

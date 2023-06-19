@@ -92,5 +92,20 @@ router.post("/fetchCashTrans", async (req, res)=>{
         return res.json({status: "Something went wrong", error: error});
     }
 });
-
+router.post("/addShopName/:id", async (req, res)=> {
+    const { businessName} = req.body;
+     const { id } = req.params;
+    try{
+        const nameExists = await signUpTemplateCopy.findOne({businessName});
+        if(!nameExists){
+            const updt = await signUpTemplateCopy.findByIdAndUpdate(id, {businessName: businessName}, {new: true});
+            res.json({status:"ok", data: updt});
+        } else {
+            return res.json({status: "exists"});
+        }
+    }
+    catch(error){
+        res.status(500).json({ error: 'Failed to update todo' });
+    }
+});
 module.exports = router;
