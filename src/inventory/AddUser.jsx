@@ -1,9 +1,105 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { IoMdArrowRoundBack } from 'react-icons/io';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { baseURL } from '../utils/constant';
+import { useLocation } from 'react-router-dom';
 
 const AddUser = () => {
+
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const bus_id = searchParams.get('bus_id');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [role, setRole] = useState('');
+    const [outlet, setOutlet] = useState('');
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+    const roles = ["Owner", "Manager", "Cashier"];
+    const [allOutlets, setAllOutlets] = useState([]);
+
+    const handleAddUser = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        //Validations
+        const validationErrors = {};
+        if (!email) {
+            validationErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            validationErrors.email = 'Invalid email address';
+        }
+        if (!name) {
+            validationErrors.name = 'Name is required';
+        }
+        if (!phoneNumber) {
+            validationErrors.phone = 'Phone number is required';
+        }
+        if (!role) {
+            validationErrors.role = 'Please choose a role';
+        }
+        if (!outlet) {
+            validationErrors.outlet = 'Please choose an outlet';
+        }
+        if (!password) {
+            validationErrors.password = 'Password is required';
+        } else if (password.length < 6) {
+            validationErrors.password = 'Password must be at least 6 characters long';
+        }
+
+        if (Object.keys(validationErrors).length === 0) {
+            // Form is valid, submit data to the server
+            const employeeData = {
+                email,
+                name,
+                password,
+                outletID: outlet._id,
+                role,
+                phoneNumber
+            }
+            try {
+                await axios.post(`${baseURL}/addEmployee`, employeeData)
+                    .then((response) => {
+                        if (response.data.status === "ok") {
+                            console.log("success");
+                            setTimeout(() => {
+                                setLoading(false);
+                            }, 2000);
+
+                        } else {
+                            console.log(response);
+                            setLoading(false);
+                        }
+                    });
+                setErrors({});
+            }
+            catch (e) {
+                if (e.code === "ERR_NETWORK") {
+                    console.log('It seems you are offline.');
+                }
+                setLoading(false);
+            }
+        } else {
+            // Form is invalid, update errors state
+            setErrors(validationErrors);
+            setLoading(false);
+        }
+    }
+    useEffect(() => {
+        const fetchOutlets = async () => {
+            try {
+                await axios.post(`${baseURL}/fetchOutlets`, { ownerID: bus_id }).then((response) => { setAllOutlets(response.data.data.outlets) }).catch((error) => { console.log(error) });
+            } catch (error) {
+                console.log('Errrrror fetching outlets', error);
+            }
+        };
+        if (allOutlets) {
+            fetchOutlets();
+        }
+    }, []);
     return (
         <Section>
             <div className='heading'>
@@ -20,45 +116,50 @@ const AddUser = () => {
                 <p>Add your users and limit what they can see and control. <span><Link>Check out user roles to learn more</Link></span></p>
             </div>
             <div className='box-b'>
-                <form action="">
+                <form onSubmit={handleAddUser}>
                     <h2>Add User</h2>
                     <div className='form-elements'>
                         <div className="input-element">
                             <label>Name</label>
-                            <input type="text" autoFocus placeholder='John Doe' />
+                            <input type="text" autoFocus placeholder='John Doe' value={name} onChange={(e) => setName(e.target.value)} />
+                            {errors.name && <span className="error">{errors.name}</span>}
                         </div>
                         <div className="input-element">
                             <label>Email</label>
-                            <input type="email" placeholder='name@example.com' />
+                            <input type="email" placeholder='name@example.com' value={email} onChange={(e) => setEmail(e.target.value)} />
+                            {errors.email && <span className="error">{errors.email}</span>}
+                        </div>
+                        <div className="input-element">
+                            <label>Phone Number</label>
+                            <input type="telephone" placeholder='07******' value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                            {errors.phone && <span className="error">{errors.phone}</span>}
                         </div>
                         <div className="input-element">
                             <label>Outlet</label>
                             <select>
-                                <option value="main">Main</option>
-                                <option value="all">All</option>
-                                <option value="south-c">South-C</option>
-                                <option value="westlands">Westlands</option>
+                                {allOutlets.map((item) => {
+                                    <options value={outlet} onSelect={(e) => { setOutlet(e.target.value) }}>{item.outletName}</options>
+                                })}
                             </select>
+                            {errors.outlet && <span className="error">{errors.outlet}</span>}
                         </div>
                         <div className="input-element">
                             <label>Role</label>
                             <select>
-                                <option value="owner">Owner</option>
-                                <option value="manager">Manager</option>
-                                <option value="cashier">Cashier</option>
+                                {roles.map((item) => {
+                                    <option value={role} onSelect={(e) => setRole(e.target.value)}>{item}</option>
+                                })}
                             </select>
+                            {errors.role && <span className="error">{errors.role}</span>}
                         </div>
                         <div className="input-element">
                             <label>Password</label>
-                            <input type="password" placeholder='Password' />
-                        </div>
-                        <div className="input-element">
-                            <label>Confirm Password</label>
-                            <input type="password" placeholder='Confirm-Password' />
+                            <input type="password" placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                            {errors.password && <span className="error">{errors.password}</span>}
                         </div>
                     </div>
                     <div className='save-button'>
-                        <button>Save</button>
+                        <button type='submit'> {loading ? <Loader /> : 'Save'}</button>
                     </div>
                 </form>
             </div>
@@ -88,6 +189,25 @@ const AddUser = () => {
 }
 
 export default AddUser
+// Keyframe animation for loader
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+const Loader = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: ${rotate} 1s linear infinite;
+  margin-left: 45%;
+`;
+
 const Section = styled.section`
     margin-left: 5vw;
     margin-right: 14px;

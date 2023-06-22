@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import styled, {keyframes} from 'styled-components';
+import React, { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { baseURL } from '../utils/constant';
 const AddShop = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const bus_id = JSON.parse(searchParams.get('bus_id'));
+    const bus_id = searchParams.get('bus_id');
     const [businessName, setBusinessName] = useState('');
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
@@ -26,24 +26,25 @@ const AddShop = () => {
 
         if (Object.keys(validationErrors).length === 0) {
             // Form is valid, submit data to the server
-            const shopName = {
-                businessName
-            }
+
             try {
-                const response = await axios.put(`${baseURL}/addShopName/${bus_id}`, shopName);
-                if (response.status === 'exists') {
+                const response = await axios.post(`${baseURL}/addShopName/${bus_id}`, { businessName });
+                if (response.status === "exists") {
                     validationErrors.error = `${businessName} is taken`;
                     setErrors(validationErrors);
                     setLoading(false);
-                } else if(response.data === 'ok') {
+                } else if (response.data === 'ok') {
                     setFeedback(`${businessName} is Available`);
+                } else {
+                    console.log(response);
                 }
                 setTimeout(() => {
                     setLoading(false);
                 }, 2000);
             }
             catch (e) {
-                validationErrors.error = "Error processsing, try later";
+                validationErrors.error = "Error processing, try again later, we are on it!";
+                console.log(e);
                 setErrors(validationErrors);
                 setLoading(false);
             }
@@ -71,7 +72,7 @@ const AddShop = () => {
                 <form onSubmit={handleAddShop}>
                     <div className="input-element">
                         <input type="text" autoFocus value={businessName} onChange={(e) => { setBusinessName(e.target.value) }} />
-                        <p>example.stockyspace.com</p>
+                        <p>{businessName}.stockyspace.com</p>
                     </div>
                     <div className='button'>
                         <button type='submit'>{loading ? <Loader /> : 'Save'}</button>
@@ -79,7 +80,7 @@ const AddShop = () => {
                 </form>
             </div>
             <div className="box-c">
-                {Object.keys(errors).length != 0 ? <span className="error">{errors.error}</span> : <span className="feedback">{feedback}</span>}
+                {Object.keys(errors).length !== 0 ? <span className="error">{errors.error}</span> : <span className="feedback">{feedback}</span>}
                 <div>
                     <Link to='inventory-manager'>
                         <button>Done</button>
@@ -100,7 +101,7 @@ const rotate = keyframes`
     transform: rotate(360deg);
   }
 `
-;
+    ;
 const Loader = styled.div`
   border: 4px solid #f3f3f3;
   border-top: 4px solid #3498db;
@@ -179,6 +180,7 @@ const Section = styled.section`
                 p{
                         margin: 10px 0;
                         font-size: 17px;
+                        font-weight: bold;
                     }
             }
             .button{
@@ -232,4 +234,4 @@ const Section = styled.section`
         }
     }
 `
-;
+    ;

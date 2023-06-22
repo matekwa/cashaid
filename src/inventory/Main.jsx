@@ -37,106 +37,101 @@ const Index = () => {
         }
     }, []);
 
-    const shopNameParam = new URLSearchParams({ bus_id: JSON.stringify(userData._id) }).toString();
-
     return (
-        <>
-        <Sidebar />
         <Section>
             {isLoading ? (<Splashscreen />) : (
                 <>
-            <div className="heading">
-                <h1>Hello {userData.username}, Set up your Business to get started.</h1>
-                <p>Just follow our lead</p>
-            </div>
-            <div className="grid">
-                <div className="card">
-                    <div className="illustration">
-                        <img src={business} alt='A shop' />
+                    <div className="heading">
+                        <h1>Hello {userData.username}, Set up your Business to get started.</h1>
+                        <p>Just follow our lead</p>
                     </div>
-                    <div className="description">
-                        <h3>Business name</h3>
-                        <p>Add a name for your business to easily identify you from other businesses.</p>
+                    <div className="grid">
+                        <div className="card">
+                            <div className="illustration">
+                                <img src={business} alt='A shop' />
+                            </div>
+                            <div className="description">
+                                <h3>Business name</h3>
+                                <p>Add a name for your business to easily identify you from other businesses.</p>
+                            </div>
+                            <div className="button">
+                                <Link to={{ pathname: '/add-business-name', search: '?bus_id=' + userData._id }}>
+                                    <button>Add Shop</button>
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="card">
+                            <div className="illustration">
+                                <img src={outlet} alt='An outlet' />
+                            </div>
+                            <div className="description">
+                                <h3>Add Outlets</h3>
+                                <p>Customize settings for all your outlets to simplify checkout process. </p>
+                            </div>
+                            <div className="button">
+                                <Link to={{ pathname: '/add-outlets', search: '?bus_id=' + userData._id }}>
+                                    <button>Add Outlet</button>
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="card">
+                            <div className="illustration">
+                                <img src={users} alt='Users' />
+                            </div>
+                            <div className="description">
+                                <h3>Set up your users and their roles</h3>
+                                <p>Create user accounts and manage what your users can see and allowed to do.</p>
+                            </div>
+                            <div className="button">
+                                <Link to={{ pathname: '/user-roles', search: '?bus_id=' + userData._id }}>
+                                    <button>Add user</button>
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="card">
+                            <div className="illustration">
+                                <img src={product} alt='Product catalog' />
+                            </div>
+                            <div className="description">
+                                <h3>Add your product catalog</h3>
+                                <p>Build your product catalogue so that you can manage your stock seamleslly.</p>
+                            </div>
+                            <div className="button">
+                                <Link to={{ pathname: '/product-catalogue', search: '?bus_id=' + userData._id }}>
+                                    <button>Add Product</button>
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="card">
+                            <div className="illustration">
+                                <img src={receipt} alt='Receipt' />
+                            </div>
+                            <div className="description">
+                                <h3>Enable receipt generation</h3>
+                                <p>Enable receipts that will be generated to your customers when billing.</p>
+                            </div>
+                            <div className="button">
+                                <Link to='receipts'>
+                                    <button>Enable receipt</button>
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="card">
+                            <div className="illustration">
+                                <img src={done} alt='Receipt' />
+                            </div>
+                            <div className="description">
+                                <h3>I'm Ready</h3>
+                                <p>I have completed all the steps successfully.</p>
+                            </div>
+                            <div className="button">
+                                <button>Continue</button>
+                            </div>
+                        </div>
                     </div>
-                    <div className="button">
-                        <Link to={{ pathname: "/add-business-name", search: shopNameParam }}>
-                            <button>Add Shop</button>
-                        </Link>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="illustration">
-                        <img src={outlet} alt='An outlet' />
-                    </div>
-                    <div className="description">
-                        <h3>Add Outlets</h3>
-                        <p>Customize settings for all your outlets to simplify checkout process. </p>
-                    </div>
-                    <div className="button">
-                        <Link to='add-outlets'>
-                            <button>Add Outlet</button>
-                        </Link>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="illustration">
-                        <img src={users} alt='Users' />
-                    </div>
-                    <div className="description">
-                        <h3>Set up your users and their roles</h3>
-                        <p>Create user accounts and manage what your users can see and allowed to do.</p>
-                    </div>
-                    <div className="button">
-                        <Link to='user-roles'>
-                            <button>Add user</button>
-                        </Link>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="illustration">
-                        <img src={product} alt='Product catalog' />
-                    </div>
-                    <div className="description">
-                        <h3>Add your product catalog</h3>
-                        <p>Build your product catalogue so that you can manage your stock seamleslly.</p>
-                    </div>
-                    <div className="button">
-                        <Link to='product-catalogue'>
-                            <button>Add Product</button>
-                        </Link>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="illustration">
-                        <img src={receipt} alt='Receipt' />
-                    </div>
-                    <div className="description">
-                        <h3>Enable receipt generation</h3>
-                        <p>Enable receipts that will be generated to your customers when billing.</p>
-                    </div>
-                    <div className="button">
-                        <Link to='receipts'>
-                            <button>Enable receipt</button>
-                        </Link>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="illustration">
-                        <img src={done} alt='Receipt' />
-                    </div>
-                    <div className="description">
-                        <h3>I'm Ready</h3>
-                        <p>I have completed all the steps successfully.</p>
-                    </div>
-                    <div className="button">
-                        <button>Continue</button>
-                    </div>
-                </div>
-            </div>
                 </>
             )}
         </Section>
-        </>
     )
 }
 

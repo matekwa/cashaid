@@ -1,23 +1,71 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { IoMdArrowRoundBack } from 'react-icons/io';
-
+import axios from 'axios';
+import { baseURL } from '../utils/constant';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import TextField from '@mui/material/TextField';
+import { useLocation } from 'react-router-dom';
 
-import { useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 
 const Outlets = () => {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const bus_id = searchParams.get('bus_id');
+    const [outletName, setOutletName] = useState('');
+    const [OutletLocation, setOutletLocation] = useState('');
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
 
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        //Validations
+        const validationErrors = {};
+        if (!outletName) {
+            validationErrors.outletName = 'Outlet name is required';
+        }
+        if (!location) {
+            validationErrors.location = 'Location is required';
+        }
+
+        if (Object.keys(validationErrors).length === 0) {
+            // Form is valid, submit data to the server
+            const outletData = {
+                ownerID: bus_id,
+                OutletLocation,
+                outletName
+            }
+            try {
+                await axios.post(`${baseURL}/addOutlet`, outletData)
+                    .then((response) => {
+                        if (response.data.status === "ok") {
+
+                            setTimeout(() => {
+                                setLoading(false);
+                            }, 2000);
+
+                        } else {
+                            console.log(response.data);
+                            setLoading(false);
+                        }
+                    });
+                setErrors({});
+            }
+            catch (e) {
+                if (e.code === "ERR_NETWORK") {
+                    console.log('It seems you are offline');
+                }
+                setLoading(false);
+            }
+        } else {
+            // Form is invalid, update errors state
+            setErrors(validationErrors);
+            setLoading(false);
+        }
+    }
     //Dtagrid
     const columns = [
         { field: 'id', headerName: 'ID', width: 90 },
@@ -61,48 +109,6 @@ const Outlets = () => {
     ];
 
 
-    //Select input
-    const ITEM_HEIGHT = 48;
-    const ITEM_PADDING_TOP = 8;
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-            },
-        },
-    };
-
-    const names = [
-        'Ronald Matekwa',
-        'Van Henry',
-        'April Tucker',
-        'Ralph Hubbard',
-    ];
-
-    function getStyles(name, personName, theme) {
-        return {
-            fontWeight:
-                personName.indexOf(name) === -1
-                    ? theme.typography.fontWeightRegular
-                    : theme.typography.fontWeightMedium,
-        };
-    }
-
-    //Multiple select
-    const theme = useTheme();
-    const [personName, setPersonName] = React.useState([]);
-
-    const handleChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setPersonName(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
-
     return (
         <Section>
             <div className='heading'>
@@ -118,7 +124,7 @@ const Outlets = () => {
             </div>
             <div className="box-c">
                 <p>These are your current outlet(s), add more or continue if you only have one outlet.</p>
-                <Box sx={{width: '100%' }}>
+                <Box sx={{ width: '100%' }}>
                     <DataGrid
                         autoHeight
                         rows={rows}
@@ -130,59 +136,20 @@ const Outlets = () => {
             </div>
             <div className='box-b'>
                 <h2> Add outlet </h2>
-                <form action="">
-                    <Box
-                        component="form"
-                        sx={{
-                            '& .MuiTextField-root': { m: 1, width: '25ch' },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <div className="formElement">
-                            <TextField
-                                id="outlet_name"
-                                label="Outlate Name"
-                                type="text"
-                                autoComplete="current-password"
-                            />
-                            <TextField
-                                id="filled-search"
-                                label="Location"
-                                type="search"
-                                variant="filled"
-                            />
-                            <FormControl sx={{ m: 1, width: 300 }}>
-                                <InputLabel id="demo-multiple-name-label">Accountant</InputLabel>
-                                <Select
-                                    labelId="demo-multiple-name-label"
-                                    id="demo-multiple-name"
-                                    multiple
-                                    value={personName}
-                                    onChange={handleChange}
-                                    input={<OutlinedInput label="Name" />}
-                                    MenuProps={MenuProps}
-                                >
-                                    {names.map((name) => (
-                                        <MenuItem
-                                            key={name}
-                                            value={name}
-                                            style={getStyles(name, personName, theme)}
-                                        >
-                                            {name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </div>
-                        <div className="buttons">
-                            <Stack spacing={2} direction="row">
-                                <Button variant="outlined">Next</Button>
-                                <Button variant="contained">Save</Button>
-                            </Stack>
-                        </div>
-                    </Box>
-                    
+                <form onSubmit={handleSubmit}>
+                    <div className="inputelement">
+                        <label htmlFor="Outlet Name">Outlet Name</label>
+                        <input type="text" placeholder='Main' value={outletName} onChange={(e) => { setOutletName(e.target.value) }} />
+                        {errors.outletName && <span className="error">{errors.outletName}</span>}
+                    </div>
+                    <div className="inputelement">
+                        <label htmlFor="Location">Location</label>
+                        <input type="Search" placeholder='Nairobi, Kenya' value={OutletLocation} onChange={(e) => { setOutletLocation(e.target.value) }} />
+                        {errors.location && <span className="error">{errors.location}</span>}
+                    </div>
+                    <div className="button">
+                        <button type='submit'> {loading ? <Loader /> : 'Save'}</button>
+                    </div>
                 </form>
             </div>
         </Section>
@@ -190,6 +157,26 @@ const Outlets = () => {
 }
 
 export default Outlets
+
+// Keyframe animation for loader
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+const Loader = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: ${rotate} 1s linear infinite;
+  margin-left: 45%;
+`;
+
 const Section = styled.section`
     margin-left: 5vw;
     margin-right: 14px;

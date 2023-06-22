@@ -5,15 +5,12 @@ import Products from './Products';
 import Sidebar from '../components/Sidebar';
 const Darshboard = () => {
   return (
-    <>
-      <Sidebar />
       <Section>
         <div className='grid'>
           <Receipt />
           <Products />
         </div>
       </Section>
-    </>
   )
 }
 

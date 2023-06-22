@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate  } from 'react-router-dom';
 import styled from 'styled-components';
 import Home from './components/Home';
 import EmailValidation from './pages/EmailValidation';
@@ -92,7 +92,7 @@ function App() {
                 <Login />
               )
             } />
-          <Route path="inventory-manager/add-business-name" element={
+          <Route path="add-business-name" element={
               loggedIn ? (
                 <>
                   <Sidebar />

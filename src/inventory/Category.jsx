@@ -1,14 +1,83 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+import axios from 'axios';
+import { baseURL } from '../utils/constant';
+import { useLocation } from 'react-router-dom';
 
 const Category = () => {
+    const [categoryName, setCategoryName] = useState('');
+    const [outlet, setOutlet] = useState('');
     const [showModal, setShowModal] = React.useState(false);
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const bus_id = searchParams.get('bus_id');
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [allOutlets, setAllOutlets] = useState([]);
+
     const handleOpenModal = () => {
         setShowModal(true);
     };
     const handleCloseModal = () => {
         setShowModal(false);
     }
+
+    const handleAddCategory = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        //Validations
+        const validationErrors = {};
+        if (!categoryName) {
+            validationErrors.cateory = 'Category name is required';
+        }
+        if (Object.keys(validationErrors).length === 0) {
+            // Form is valid, submit data to the server
+            const categoryData = {
+                ownerID: bus_id,
+                categoryName
+            }
+            try {
+                await axios.put(`${baseURL}/addCategory`, categoryData)
+                    .then((response) => {
+                        if (response.data.status === "ok") {
+                            console.log("success");
+                            setTimeout(() => {
+                                setLoading(false);
+                            }, 2000);
+
+                        } else {
+                            console.log(response);
+                            setLoading(false);
+                        }
+                    });
+                setErrors({});
+            }
+            catch (e) {
+                if (e.code === "ERR_NETWORK") {
+                    console.log('It seems you are offline.');
+                }
+                setLoading(false);
+            }
+        } else {
+            // Form is invalid, update errors state
+            setErrors(validationErrors);
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        const fetchOutlets = async () => {
+            try {
+                await axios.post(`${baseURL}/fetchOutlets`, { ownerID: bus_id }).then((response) => { setAllOutlets(response.data.data.outlets) }).catch((error) => { console.log(error) });
+            } catch (error) {
+                console.log('Errrrror fetching outlets', error);
+            }
+        };
+        if (allOutlets) {
+            fetchOutlets();
+        }
+    }, []);
     return (
         <DIV>
             <div className="category">
@@ -21,11 +90,21 @@ const Category = () => {
                         <ModalWrapper>
                             <ModalContent>
                                 <h2>Product Category</h2>
-                                <form action="">
-                                    <input type="text" placeholder='Category name' autoFocus/>
+                                <form onSubmit={handleAddCategory}>
+                                    <input type="text" placeholder='Category name' value={categoryName} onChange={(e)=>setCategoryName(e.target.value)} autoFocus/>
+                                    {errors.cateory && <span className="error">{errors.cateory}</span>}
+                                    <div className="input-element">
+                                        <label htmlFor="Outlet">Outlet</label>
+                                        <select>
+                                            {allOutlets.map((item) => {
+                                                <option value={outlet} onSelect={(e) => setOutlet(e.target.value)}>{item.outletName}</option>
+                                            })}
+                                        </select>
+                                        {errors.outlet && <span className="error">{errors.outlet}</span>}
+                                    </div>
                                     <div className="buttons">
                                         <Button onClick={handleCloseModal}>Cancel</Button>
-                                        <Button >Save</Button>
+                                        <Button type='submit'> {loading ? <Loader /> : 'Save'}</Button>
                                     </div>
                                 </form>
                             </ModalContent>
@@ -44,6 +123,24 @@ const Category = () => {
 }
 
 export default Category
+// Keyframe animation for loader
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+const Loader = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: ${rotate} 1s linear infinite;
+  margin-left: 45%;
+`;
 const DIV = styled.div`
   .category{
         background-color: #F5F5FD;

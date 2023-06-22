@@ -1,14 +1,81 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+import axios from 'axios';
+import { baseURL } from '../utils/constant';
+import { useLocation } from 'react-router-dom';
 
 const Suppliers = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const bus_id = searchParams.get('bus_id');
+  const [businessName, setBusinessName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [secondName, setSecondName] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [town, setTown] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [showModal, setShowModal] = React.useState(false);
   const handleOpenModal = () => {
     setShowModal(true);
   };
   const handleCloseModal = () => {
     setShowModal(false);
+  }
+
+  const handleAddSupplier = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    //Validations
+    const validationErrors = {};
+    if (!firstName || !secondName || !email || !address || !town || ! phoneNumber || !businessName) {
+      validationErrors.feedback = 'All fields are required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      validationErrors.feedback = 'Invalid email address';
+    }
+
+    if (Object.keys(validationErrors).length === 0) {
+      // Form is valid, submit data to the server
+      const supplierData = {
+        firstName,
+        secondName,
+        email,
+        address,
+        town,
+        phoneNumber,
+        businessName,
+        ownerID: bus_id
+      }
+      try {
+        await axios.put(`${baseURL}/addSupplier`, supplierData)
+          .then((response) => {
+            if (response.data.status === "ok") {
+              console.log("success");
+              setTimeout(() => {
+                setLoading(false);
+              }, 2000);
+
+            } else {
+              console.log(response);
+              setLoading(false);
+            }
+          });
+        setErrors({});
+      }
+      catch (e) {
+        if (e.code === "ERR_NETWORK") {
+          console.log('It seems you are offline.');
+        }
+        setLoading(false);
+      }
+    } else {
+      // Form is invalid, update errors state
+      setErrors(validationErrors);
+      setLoading(false);
+    }
   }
 
   return (
@@ -23,16 +90,17 @@ const Suppliers = () => {
             <ModalWrapper>
               <ModalContent>
                 <h2>Suppliers</h2>
-                <form action="">
-                  <input type="text" placeholder='First name' autoFocus />
-                  <input type="text" placeholder='Second name' />
-                  <input type="email" placeholder='Email' />
-                  <input type="text" placeholder='Postal Address' />
-                  <input type="text" placeholder='Town' />
-                  <input type="telephone" placeholder='Phone Number' />
+                <form onSubmit={handleAddSupplier}>
+                  <input type="text" placeholder='Business name' autoFocus value={businessName} onChange={(e) => setBusinessName(e.target.value)} />
+                  <input type="text" placeholder='First name' autoFocus value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                  <input type="text" placeholder='Second name' value={secondName} onChange={(e) => setSecondName(e.target.value)} />
+                  <input type="email" placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <input type="text" placeholder='Postal Address' value={address} onChange={(e) => setAddress(e.target.value)} />
+                  <input type="text" placeholder='Town' value={town} onChange={(e) => setTown(e.target.value)} />
+                  <input type="telephone" placeholder='Phone Number' value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                   <div className="buttons">
                     <Button onClick={handleCloseModal}>Cancel</Button>
-                    <Button >Save</Button>
+                    <Button type='submit'> {loading ? <Loader /> : 'Save'}</Button>
                   </div>
                 </form>
               </ModalContent>
@@ -51,6 +119,24 @@ const Suppliers = () => {
 }
 
 export default Suppliers
+// Keyframe animation for loader
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+const Loader = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: ${rotate} 1s linear infinite;
+  margin-left: 45%;
+`;
 const DIV = styled.div`
   .suppliers{
         background-color: #F5F5FD;
