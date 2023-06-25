@@ -1,9 +1,15 @@
 Shop
 {
   "name": "Comeback",
-  "ownerID": "hghsg898shjsh",
-  "categories": [];
+  "ownerID": "6484fa683821a7533bb96feb",
+  "categories": ["Lunch","Chrome","Supper"];
   "outlets":[
+    {
+      "outletName": "Main",
+      "location": "Westlands",
+      "cashier": "",
+      "manager": ""
+    },
     {
       "outletName": "Main",
       "Location": "Westlands",
@@ -20,7 +26,7 @@ Shop
     "phoneNumber": "0713490657",
     "address": "PO Box 12329",
     "town": "Kericho"
-    }
+    },
   ]
 }
 

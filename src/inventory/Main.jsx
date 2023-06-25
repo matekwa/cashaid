@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 import Splashscreen from '../components/Splashscreen';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
-import Sidebar from '../components/Sidebar';
 
 const Index = () => {
     const [userData, setUsertData] = useState({});

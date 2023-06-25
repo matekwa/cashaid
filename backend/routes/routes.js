@@ -103,11 +103,11 @@ router.post("/addShopName/:id", async (req, res) => {
       //Shop name doesn't exist
       const shop = new shopModelTemplate({
         name,
-        ownerID: req.params
+        ownerID: req.params.id
     })
-    shop.save().then(data => {res.json(data)}).catch(error => {res.json(error)});
+    shop.save().then(data => {res.json({status:"ok", data:data})}).catch(error => {res.json(error)});
     } else {
-      //Name already exists
+      //Shop name already exists
       return  res.status(409).json({ status: "exists" });
     }
   } catch (error) {
@@ -115,30 +115,51 @@ router.post("/addShopName/:id", async (req, res) => {
   }
 });
 
-router.post("/addOutlet", async (req, res) => {
-      const  ownerID = req.body.ownerID;
-  try {
-      const outlet = {
-          location: req.body.OutletLocation,
-          name: req.body.outletName
-    }
-      await shopModelTemplate.findByIdAndUpdate({ownerID}, outlet);
-  } catch (error) {
-     res.status(500).json({ error: error.message });
-  }
-});
-
-router.post("/fetchOutlets", async (req, res)=>{
+router.put("/addOutlet", async (req, res) => {
     const ownerID = req.body.ownerID;
-    try{
-         await shopModelTemplate.find({ownerID}).then((data)=>{res.json({status: "ok", data: data})}).catch((error)=>{res.json({status: "error", data: error})});
+    try {
+      const outlet = {
+        location: req.body.outletLocation,
+        outletName: req.body.outletName
+      };
+  
+      await shopModelTemplate.findOneAndUpdate({ ownerID }, { $push: { outlets: outlet } });
+  
+      res.status(200).json({ status: "ok" });
+    } catch (error) {
+      res.json({ status: "error", error: error });
     }
-    catch(error){
-        return res.json({status: "Something went wrong", error: error});
+  });
+
+  router.get("/fetchOutlets", async (req, res) => {
+    const ownerID = req.query.ownerID;
+  
+    try {
+      const data = await shopModelTemplate.find({ ownerID });
+      const outlets = data.length > 0 ? data[0].outlets : [];
+      res.json({ status: "ok", data: outlets });
+    } catch (error) {
+      res.json({ status: "error", data: error });
     }
-});
+  });
+  
+
+  router.get("/fetchUsers", async (req, res) => {
+    const shopID = req.query.shopID;
+  
+    try {
+      const data = await employeesModelTemplate.find({ shopID });
+      res.json({ status: "ok", data: data });
+    } catch (error) {
+      res.json({ status: "error", data: error });
+    }
+  });
+  
+  
+
 
 router.post("/addEmployee", async (req, res)=> {
+    const ownerID = req.body.ownerID;
     const saltedPassword = await bcrypt.genSalt(10);
     const securedPassword = await bcrypt.hash(req.body.password, saltedPassword);
     const employee = new employeesModelTemplate({
@@ -147,10 +168,23 @@ router.post("/addEmployee", async (req, res)=> {
         outletID: req.body.outletID,
         role: req.body.role,
         outletID: req.body.outletID,
+        shopID: ownerID,
         password: securedPassword
     })
     employee.save().then((data) => {res.json({status: "ok", data: data})} ).catch((error)=> {res.json({error: "error", data:error})});
-    //Update shops collection with _id: 'outleID' - Cashier or Manager
+    if(employee.role === "Cashier"){
+      await shopModelTemplate.findOneAndUpdate(
+        { ownerID: ownerID },
+        { $set: { 'outlets.$.cashier': employee.name  } },
+        { new: true }
+      )
+    } else if(employee.role = "Manager"){
+      await shopModelTemplate.findOneAndUpdate(
+        { ownerID: ownerID },
+        { $set: { 'outlets.$.manager': employee.name  } },
+        { new: true }
+      )
+    }
 });
 
 router.post("/addCategory", async (req, res) => {

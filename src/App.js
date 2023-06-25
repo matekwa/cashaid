@@ -102,7 +102,7 @@ function App() {
                 <Login />
               )
             } />
-          <Route path="inventory-manager/add-outlets" element={
+          <Route path="add-outlets" element={
               loggedIn ? (
                 <>
                   <Sidebar />
@@ -112,7 +112,7 @@ function App() {
                 <Login />
               )
             } />
-          <Route path="inventory-manager/user-roles" element={
+          <Route path="user-roles" element={
               loggedIn ? (
                 <>
                   <Sidebar />
@@ -122,7 +122,7 @@ function App() {
                 <Login />
               )
             } />
-          <Route path="inventory-manager/product-catalogue" element={
+          <Route path="product-catalogue" element={
               loggedIn ? (
                 <>
                   <Sidebar />
@@ -132,7 +132,7 @@ function App() {
                 <Login />
               )
             } />
-          <Route path="inventory-manager/receipts" element={
+          <Route path="receipts" element={
               loggedIn ? (
                 <>
                   <Sidebar />

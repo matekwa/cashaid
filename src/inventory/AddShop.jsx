@@ -33,7 +33,7 @@ const AddShop = () => {
                     validationErrors.error = `${businessName} is taken`;
                     setErrors(validationErrors);
                     setLoading(false);
-                } else if (response.data === 'ok') {
+                } else if (response.status === 'ok') {
                     setFeedback(`${businessName} is Available`);
                 } else {
                     console.log(response);

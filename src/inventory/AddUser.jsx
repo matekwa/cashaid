@@ -3,7 +3,8 @@ import styled, { keyframes } from 'styled-components';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
+import Splashscreen from '../components/Splashscreen';
 
 const AddUser = () => {
 
@@ -20,6 +21,7 @@ const AddUser = () => {
     const [loading, setLoading] = useState(false);
     const roles = ["Owner", "Manager", "Cashier"];
     const [allOutlets, setAllOutlets] = useState([]);
+    const [users, setUsers] = useState([]);
 
     const handleAddUser = async (e) => {
         e.preventDefault();
@@ -56,9 +58,10 @@ const AddUser = () => {
                 email,
                 name,
                 password,
-                outletID: outlet._id,
+                outletID: outlet,
                 role,
-                phoneNumber
+                phoneNumber,
+                ownerID:bus_id
             }
             try {
                 await axios.post(`${baseURL}/addEmployee`, employeeData)
@@ -90,16 +93,29 @@ const AddUser = () => {
     }
     useEffect(() => {
         const fetchOutlets = async () => {
-            try {
-                await axios.post(`${baseURL}/fetchOutlets`, { ownerID: bus_id }).then((response) => { setAllOutlets(response.data.data.outlets) }).catch((error) => { console.log(error) });
-            } catch (error) {
-                console.log('Errrrror fetching outlets', error);
-            }
+          try {
+            const response = await axios.get(`${baseURL}/fetchOutlets`, { params: { ownerID: bus_id } });
+            setAllOutlets(response.data.data);
+            setLoading(false);  
+          } catch (error) {
+            setLoading(false);
+            alert(error);
+          }
         };
-        if (allOutlets) {
-            fetchOutlets();
-        }
-    }, []);
+        const fetchUsers = async () => {
+            try {
+              const response = await axios.get(`${baseURL}/fetchUsers`, { params: { shopID: bus_id } });
+              setUsers(response.data.data);
+              setLoading(false);  
+            } catch (error) {
+              setLoading(false);
+              alert(error);
+            }
+          };
+      
+        fetchOutlets();
+        fetchUsers();
+      }, []);
     return (
         <Section>
             <div className='heading'>
@@ -112,6 +128,8 @@ const AddUser = () => {
                     <h2>Add users and their roles</h2>
                 </div>
             </div>
+                {loading ? (<Splashscreen />) : (
+                <>
             <div className="box-a">
                 <p>Add your users and limit what they can see and control. <span><Link>Check out user roles to learn more</Link></span></p>
             </div>
@@ -136,18 +154,18 @@ const AddUser = () => {
                         </div>
                         <div className="input-element">
                             <label>Outlet</label>
-                            <select>
+                            <select value={outlet} onChange={(e) => { setOutlet(e.target.value) }}>
                                 {allOutlets.map((item) => {
-                                    <options value={outlet} onSelect={(e) => { setOutlet(e.target.value) }}>{item.outletName}</options>
+                                    return <option key={item._id} value={item._id} >{item.outletName}</option>
                                 })}
                             </select>
                             {errors.outlet && <span className="error">{errors.outlet}</span>}
                         </div>
                         <div className="input-element">
                             <label>Role</label>
-                            <select>
+                            <select value={role} onChange={(e) => setRole(e.target.value)}>
                                 {roles.map((item) => {
-                                    <option value={role} onSelect={(e) => setRole(e.target.value)}>{item}</option>
+                                    return <option key={item} value={item}>{item}</option>
                                 })}
                             </select>
                             {errors.role && <span className="error">{errors.role}</span>}
@@ -166,24 +184,35 @@ const AddUser = () => {
             <div className="box-c">
                 <div className='addedUsers'>
                     <h2 className='table-heading'>Current users</h2>
-                    <table>
-                        <thead>
+                    {users.length === 0 ? (
+                        <div>
+                            <p>You don't have any employee for this shop</p>
+                        </div>
+                        ) : (
+                        <table>
+                            <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Outlet</th>
                                 <th>Role</th>
+                                <th>Phone number</th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td data-label="Name"><Link>Ronald</Link></td>
-                                <td data-label="Outlet">All</td>
-                                <td data-label="Role">Owner</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            {users.map((user) => (
+                                <tr key={user._id}>
+                                <td>{user.name}</td>
+                                <td>{user.role}</td>
+                                <td>{user.phoneNumber}</td>
+                                <td>Delete</td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                        )}
                 </div>
             </div>
+            </>
+        )}
         </Section>
     )
 }
@@ -272,6 +301,8 @@ const Section = styled.section`
             }
 
             .input-element{
+                display: flex;
+                flex-direction: column;
                 label{
                     font-weight: bold;
                     padding: .5rem 0;
@@ -295,9 +326,13 @@ const Section = styled.section`
                     border 1 solid #0C2340;
                 }
                 p{
-                        margin: 10px 0;
-                        font-size: 17px;
-                    }
+                    margin: 10px 0;
+                    font-size: 17px;
+                }
+                .error{
+                    color: red;
+                    text-align: center;
+                }
             }
             .save-button{
                 position: absolute;
