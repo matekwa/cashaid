@@ -8,20 +8,17 @@ import { AiOutlineSchedule } from 'react-icons/ai';
 import { FaAward } from 'react-icons/fa';
 import { VscSettingsGear } from 'react-icons/vsc';
 import { MdOutlineReceiptLong } from 'react-icons/md';
-import { Tooltip } from 'react-tooltip';
+
 
 function Sidebar() {
   const [currentLink, setCurrentLink] = useState(1);
 
-  useEffect(() => {
-    // Initialize the tooltip library
-    window.$('.tooltip-container').tooltip();
-  }, []);
+
   return (
     <Section>
       <div className="top">
         <div className="brand">
-          <h3>Cashaid</h3>
+          <h3>SalesFlow</h3>
         </div>
         <div className="links">
           <ul>
@@ -88,7 +85,6 @@ function Sidebar() {
           </ul>
         </div>
       </div>
-      <Tooltip effect="solid" place="right" />
     </Section>
   );
 }

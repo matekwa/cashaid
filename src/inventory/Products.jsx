@@ -31,7 +31,13 @@ const Products = () => {
   const [allCategories, setAllCategories] = useState([]);
   const [allOutlets, setAllOutlets] = useState([]);
   const natureOfProduct = ["Manufactured", "Raw Material"];
-  const typesOfBarcode = ["IEE", "STRD"];
+  const typesOfBarcode = ["UPC (Universal Product Code)",
+  "EAN (European Article Numbering)",
+  "Code 39",
+  "Code 128",
+  "QR Code (Quick Response Code)",
+  "PDF417",
+  "Data Matrix"];
   const vat = ["Incl VAT", "Excl VAT"];
 
   const renderComponent = () => {
@@ -173,10 +179,6 @@ const Products = () => {
           <form onSubmit={handleAddProduct}>
             <div className="form">
               <div>
-                <div className="input-element">
-                  <label htmlFor="ref">Ref.</label>
-                  <input type="text" value='P00929' placeholder='Product label' disabled />
-                </div>
                 <div className="input-element">
                   <label htmlFor="product label">Product label</label>
                   <input type="text" placeholder='Product label' autoFocus value={productLabel} onChange={(e) => setProductLabel(e.target.value)} />

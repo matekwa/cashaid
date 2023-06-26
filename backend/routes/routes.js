@@ -169,38 +169,42 @@ router.post("/addEmployee", async (req, res)=> {
         role: req.body.role,
         outletID: req.body.outletID,
         shopID: ownerID,
+        phoneNumber: req.body.phoneNumber,
         password: securedPassword
     })
     employee.save().then((data) => {res.json({status: "ok", data: data})} ).catch((error)=> {res.json({error: "error", data:error})});
-    if(employee.role === "Cashier"){
-      await shopModelTemplate.findOneAndUpdate(
-        { ownerID: ownerID },
-        { $set: { 'outlets.$.cashier': employee.name  } },
-        { new: true }
-      )
-    } else if(employee.role = "Manager"){
-      await shopModelTemplate.findOneAndUpdate(
-        { ownerID: ownerID },
-        { $set: { 'outlets.$.manager': employee.name  } },
-        { new: true }
-      )
+    try{
+      if(employee.role === "Cashier"){
+        await shopModelTemplate.findOneAndUpdate(
+          { ownerID: ownerID },
+          { $set: { 'outlets.$.cashier': employee.name  } },
+          { new: true }
+        )
+      } else if(employee.role = "Manager"){
+        await shopModelTemplate.findOneAndUpdate(
+          { ownerID: ownerID },
+          { $set: { 'outlets.$.manager': employee.name  } },
+          { new: true }
+        )
+      }
+    }
+    catch(error){
+      return res.json({status:"error updating role", data: error});
     }
 });
 
 router.post("/addCategory", async (req, res) => {
+  const ownerID = req.body.shopID;
   try {
-      const categoryName = req.body.categoryName;
-      const ownerID = req.body.ownerID;
-      
       const category = new categoriesModelTemplate({
         categoryName: req.body.categoryName,
-        ownerID: req.body.ownerID
+        shopID: req.body.shopID,
+        outletID: req.body.outletID
     })
-    employee.save().then((data) => {res.json({status: "ok", data: data})} ).catch((error)=> {res.json({error: "error", data:error})});
-
-    //Update shops collection to add category
+    category.save().then((data) => {res.json({status: "ok", data: data})} ).catch((error)=> {res.json({error: "error", data:error})});
+    await shopModelTemplate.findOneAndUpdate({ ownerID }, { $push: { categories: req.body.categoryName } });
   } catch (error) {
-     res.status(500).json({ error: error.message });
+     res.json({ status: "error", error: error.message });
   }
 });
 
@@ -216,11 +220,9 @@ router.put("/addSupplier", async (req, res) => {
           phoneNumber: req.body.phoneNumber,
           businessName: req.body.businessName
       } 
-      
-      //update shopModelTemplate where ownerID, suppliers
-    
+      await shopModelTemplate.findOneAndUpdate({ ownerID }, { $push: { suppliers: supplierData } });
   } catch (error) {
-     res.status(500).json({ error: error.message });
+     res.json({status:"updateSupplierError", error: error.message });
   }
 });
 module.exports = router;

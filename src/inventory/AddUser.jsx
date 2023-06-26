@@ -18,6 +18,7 @@ const AddUser = () => {
     const [role, setRole] = useState('');
     const [outlet, setOutlet] = useState('');
     const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const roles = ["Owner", "Manager", "Cashier"];
     const [allOutlets, setAllOutlets] = useState([]);
@@ -67,7 +68,7 @@ const AddUser = () => {
                 await axios.post(`${baseURL}/addEmployee`, employeeData)
                     .then((response) => {
                         if (response.data.status === "ok") {
-                            console.log("success");
+                            alert("success");
                             setTimeout(() => {
                                 setLoading(false);
                             }, 2000);
@@ -92,30 +93,21 @@ const AddUser = () => {
         }
     }
     useEffect(() => {
-        const fetchOutlets = async () => {
+        const fetchOutletsAndUsers = async () => {
           try {
-            const response = await axios.get(`${baseURL}/fetchOutlets`, { params: { ownerID: bus_id } });
-            setAllOutlets(response.data.data);
-            setLoading(false);  
+            const responseOutlets = await axios.get(`${baseURL}/fetchOutlets`, { params: { ownerID: bus_id } });
+            setAllOutlets(responseOutlets.data.data);
+            const responseUsers = await axios.get(`${baseURL}/fetchUsers`, { params: { shopID: bus_id } });
+            setUsers(responseUsers.data.data);
+            setIsLoading(false);  
           } catch (error) {
-            setLoading(false);
-            alert(error);
+            setIsLoading(false);
+            console.log(error);
           }
         };
-        const fetchUsers = async () => {
-            try {
-              const response = await axios.get(`${baseURL}/fetchUsers`, { params: { shopID: bus_id } });
-              setUsers(response.data.data);
-              setLoading(false);  
-            } catch (error) {
-              setLoading(false);
-              alert(error);
-            }
-          };
-      
-        fetchOutlets();
-        fetchUsers();
+          fetchOutletsAndUsers();
       }, []);
+      
     return (
         <Section>
             <div className='heading'>
@@ -128,7 +120,7 @@ const AddUser = () => {
                     <h2>Add users and their roles</h2>
                 </div>
             </div>
-                {loading ? (<Splashscreen />) : (
+                {isLoading ? (<Splashscreen />) : (
                 <>
             <div className="box-a">
                 <p>Add your users and limit what they can see and control. <span><Link>Check out user roles to learn more</Link></span></p>

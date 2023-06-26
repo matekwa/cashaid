@@ -70,7 +70,7 @@ const Signup = () => {
                 <img src={background} className="imagebg" alt="Background"></img>
             </div>
             <header>
-                <p>Cashaid</p>
+                <p>SalesFlow</p>
             </header>
             <body>
                 <div className='logincard'>

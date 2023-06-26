@@ -3,8 +3,14 @@ const mongoose = require('mongoose');
 const outletSchema = new mongoose.Schema({
   outletName: String,
   location: String,
-  cashier: String,
-  manager: String
+  cashier: {
+    type: String,
+    default: ''
+  },
+  manager: {
+    type: String,
+    default: ''
+  }
 });
 
 const supplierSchema = new mongoose.Schema({
@@ -26,3 +32,4 @@ const shopSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('shops', shopSchema);
+

@@ -34,6 +34,7 @@ const Index = () => {
         if (token) {
             fetchData();
         }
+        document.title = 'Skyfalke SalesFlow | Inventory Managent';
     }, []);
 
     return (

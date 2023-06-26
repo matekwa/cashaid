@@ -17,6 +17,7 @@ const Suppliers = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -98,6 +99,7 @@ const Suppliers = () => {
                   <input type="text" placeholder='Postal Address' value={address} onChange={(e) => setAddress(e.target.value)} />
                   <input type="text" placeholder='Town' value={town} onChange={(e) => setTown(e.target.value)} />
                   <input type="telephone" placeholder='Phone Number' value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                  {errors.feedback && <span className="error">{errors.feedback}</span>}
                   <div className="buttons">
                     <Button onClick={handleCloseModal}>Cancel</Button>
                     <Button type='submit'> {loading ? <Loader /> : 'Save'}</Button>

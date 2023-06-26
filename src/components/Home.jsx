@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import RightSidebar from './RightSidebar';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
+import NetworkErr from './NetworkErr';
 
 const Home = () => {
 
   const [userData, setUsertData] = useState({});
-  const navigate = useNavigate();
+  const [offline, setOffline] = useState(false);
 
 
   useEffect(() => {
@@ -22,21 +22,28 @@ const Home = () => {
       try {
         await axios.post(`${baseURL}/details`, tokenObj).then((response) => { setUsertData(response.data.data) }).catch((error) => { console.log(error) });
       } catch (error) {
-        console.log('Errrrror fetching data', error);
+        if(error.code === "ERR_NETWORK"){
+          setOffline(true);
+        }
       }
     };
 
     if (token) {
       fetchData();
+    } else {
+      window.location.href = "auth/login";
     }
+    document.title = 'Skyfalke SalesFlow | Dashbord';
   }, []);
 
   return (
     Object.keys(userData).length > 0 && (
-      <>
-        <Dashboard {...userData} />
-        <RightSidebar {...userData} />
-      </>
+      offline ? (<NetworkErr />) : (
+        <>
+          <Dashboard {...userData} />
+          <RightSidebar {...userData} />
+        </>
+      )
     )
   );
 };

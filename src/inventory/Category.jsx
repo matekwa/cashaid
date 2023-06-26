@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
 import { useLocation } from 'react-router-dom';
+import Splashscreen from '../components/Splashscreen';
 
 const Category = () => {
     const [categoryName, setCategoryName] = useState('');
@@ -14,6 +15,9 @@ const Category = () => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [allOutlets, setAllOutlets] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [categoryList, setCategoryList] = useState([]);
+    
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -29,13 +33,17 @@ const Category = () => {
         //Validations
         const validationErrors = {};
         if (!categoryName) {
-            validationErrors.cateory = 'Category name is required';
+            validationErrors.category = 'Category name is required';
+        }
+        if (!outlet) {
+            validationErrors.outlet = 'Please choose an outlet';
         }
         if (Object.keys(validationErrors).length === 0) {
             // Form is valid, submit data to the server
             const categoryData = {
-                ownerID: bus_id,
-                categoryName
+                shopID: bus_id,
+                categoryName,
+                outletID: outlet
             }
             try {
                 await axios.put(`${baseURL}/addCategory`, categoryData)
@@ -67,16 +75,23 @@ const Category = () => {
     }
 
     useEffect(() => {
-        const fetchOutlets = async () => {
+        const fetchData = async () => {
             try {
-                await axios.post(`${baseURL}/fetchOutlets`, { ownerID: bus_id }).then((response) => { setAllOutlets(response.data.data.outlets) }).catch((error) => { console.log(error) });
+                const outletResponse = await axios.get(`${baseURL}/fetchOutlets`, { params: { ownerID: bus_id } });
+                const categoriesResponse = await axios.get(`${baseURL}/fetchCategories`, { params: { ownerID: bus_id } });
+                if(outletResponse.data.data){
+                    setAllOutlets(outletResponse.data.data);
+                  }
+                  if(categoriesResponse.data.data){
+                    setCategoryList(categoriesResponse.data.data);
+                  }
+                setIsLoading(false); 
             } catch (error) {
+                setIsLoading(false); 
                 console.log('Errrrror fetching outlets', error);
             }
         };
-        if (allOutlets) {
             fetchOutlets();
-        }
     }, []);
     return (
         <DIV>
@@ -92,12 +107,12 @@ const Category = () => {
                                 <h2>Product Category</h2>
                                 <form onSubmit={handleAddCategory}>
                                     <input type="text" placeholder='Category name' value={categoryName} onChange={(e)=>setCategoryName(e.target.value)} autoFocus/>
-                                    {errors.cateory && <span className="error">{errors.cateory}</span>}
+                                    {errors.category && <span className="error">{errors.category}</span>}
                                     <div className="input-element">
                                         <label htmlFor="Outlet">Outlet</label>
-                                        <select>
+                                        <select value={outlet} onChange={(e) => { setOutlet(e.target.value) }}>
                                             {allOutlets.map((item) => {
-                                                <option value={outlet} onSelect={(e) => setOutlet(e.target.value)}>{item.outletName}</option>
+                                                return <option key={item._id} value={item._id} >{item.outletName}</option>
                                             })}
                                         </select>
                                         {errors.outlet && <span className="error">{errors.outlet}</span>}
@@ -113,10 +128,25 @@ const Category = () => {
                 </div>
             </div>
             <div className="category-list">
-                <div className="img">
-
-                </div>
-                <p>Your category list is empty.</p>
+            <p>These are your current category(s)</p>
+                { 
+                    isLoading ? (<Splashscreen />) : (
+                        categoryList.length === 0 ? <div><p>You do not have any catgory</p></div> : (<table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {categoryList.map((category) => (
+                                <tr key={category}>
+                                    <td>{category}</td>
+                                    <td>Delete</td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>))
+                }
             </div>
         </DIV>
     )
@@ -178,9 +208,43 @@ const DIV = styled.div`
         font-size: 20px;
 
 
-        .img{
+        table {
+            border: none;
             width: 100%;
-            hight: 220px;
+            margin: 0 auto;
+            margin-bottom: 20px;
+          }
+          
+          th, td {
+              text-align: left;
+              padding: 8px;
+          }
+          td{
+              background: white;
+              padding: 1rem;
+          }
+          
+          tr:nth-child(even) {
+              background-color: white;
+          }
+          @media only screen and (max-width: 600px) {
+            table {
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+                margin-bottom: 20px;
+            }
+            th, td {
+                display: block;
+            }
+            td {
+                border: none;
+            }
+            td:before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+            }
         }
     }
 `

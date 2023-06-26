@@ -55,7 +55,7 @@ const Login = () => {
             }
             catch (e) {
                 if (e.code === "ERR_NETWORK") {
-                    setLoginFail('You are not connect to internet');
+                    setLoginFail('It seems you not connected to Internet.');
                 }
                 setLoading(false);
             }
@@ -66,7 +66,7 @@ const Login = () => {
         }
     }
     useEffect(() => {
-        document.title = 'StockySapce | Log in';
+        document.title = 'Skyfalke SalesFlow | Log in';
     });
     return (
         <Section>
@@ -74,7 +74,7 @@ const Login = () => {
                 <img src={background} className="imagebg" alt="Background"></img>
             </div>
             <header>
-                <p>Cashaid</p>
+                <p>SalesFlow</p>
             </header>
             <body>
                 <div className='logincard'>

@@ -1,15 +1,27 @@
 const mongoose = require('mongoose');
 
-const catgorySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  ownerID: {
-    type: String,
-    required: true
-  }
+const productSchema = new mongoose.Schema({
+  refNo: String,
+  productLabel: String,
+  serialNo: String,
+  barcodeType: String,
+  barcodeValue: String,
+  productDescription: String,
+  wholesalePrice: Number,
+  retailPrice: Number,
+  tax: Number,
+  productImage: String,
+  outletID: String,
+  supplier: String,
+  physicalStock: Number,
+  stockLimit: Number
 });
 
-module.exports  = mongoose.model('categories', catgorySchema);
+const lunchSchema = new mongoose.Schema({
+  categoryName: String,
+  shopID: String,
+  outletID: String,
+  Products: [productSchema]
+});
+
+module.exports = mongoose.model('categories', lunchSchema);

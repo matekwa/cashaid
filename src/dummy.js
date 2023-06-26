@@ -50,7 +50,20 @@ Categories
   "outletID": "ue7ejddy8ndjkd90,02kfss.kkkp",
   "Products":[
     {
-      
-    }
+      "refNo": "wjjw87",
+      "productLabel": "Kuku",
+      "serialNo": "jhd7878",
+      "barcodeType": "BTY",
+      "barcodeValue": "778nhjd8u",
+      "productDescription": "Green and awesome",
+      "wholesalePrice": 793,
+      "retailPrice": 8929,
+      "tax": 0.2,
+      "productImage": "goh.png",
+      "outletID": "jhjsy782h",
+      "supplier": "BISMAT Enterprise",
+      "physicalStock": 89,
+      "stockLimit": 7
+    },
   ]
 }

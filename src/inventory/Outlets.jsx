@@ -104,8 +104,6 @@ const Outlets = () => {
         if(response.data.data){
           setAllOutlets(response.data.data);
         }
-        console.log(allOutlets);
-        console.log(response.data.data)
         setIsLoading(false);  
       } catch (error) {
         setIsLoading(false);
