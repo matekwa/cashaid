@@ -51,24 +51,21 @@ const Suppliers = () => {
         ownerID: bus_id
       }
       try {
-        await axios.put(`${baseURL}/addSupplier`, supplierData)
-          .then((response) => {
-            if (response.data.status === "ok") {
-              console.log("success");
-              setTimeout(() => {
-                setLoading(false);
-              }, 2000);
-
-            } else {
-              console.log(response);
-              setLoading(false);
-            }
-          });
-        setErrors({});
+        const response = await axios.put(`${baseURL}/addSupplier`, supplierData);
+        if (response.data.status === "ok") {
+          console.log("success");
+          setTimeout(() => {
+            setLoading(false);
+          }, 2000);
+          setShowModal(false);
+        } else {
+          console.log(response);
+          setLoading(false);
+        }
       }
       catch (e) {
         if (e.code === "ERR_NETWORK") {
-          console.log('It seems you are offline.');
+          alert('It seems you are offline.');
         }
         setLoading(false);
       }

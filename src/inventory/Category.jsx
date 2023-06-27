@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Splashscreen from '../components/Splashscreen';
 
 const Category = () => {
@@ -79,19 +79,15 @@ const Category = () => {
             try {
                 const outletResponse = await axios.get(`${baseURL}/fetchOutlets`, { params: { ownerID: bus_id } });
                 const categoriesResponse = await axios.get(`${baseURL}/fetchCategories`, { params: { ownerID: bus_id } });
-                if(outletResponse.data.data){
-                    setAllOutlets(outletResponse.data.data);
-                  }
-                  if(categoriesResponse.data.data){
-                    setCategoryList(categoriesResponse.data.data);
-                  }
+                setAllOutlets(outletResponse.data.data);
+                setCategoryList(categoriesResponse.data.data);
                 setIsLoading(false); 
             } catch (error) {
                 setIsLoading(false); 
-                console.log('Errrrror fetching outlets', error);
+                console.log('Error fetching data', error);
             }
         };
-            fetchOutlets();
+            fetchData();
     }, []);
     return (
         <DIV>
@@ -108,15 +104,13 @@ const Category = () => {
                                 <form onSubmit={handleAddCategory}>
                                     <input type="text" placeholder='Category name' value={categoryName} onChange={(e)=>setCategoryName(e.target.value)} autoFocus/>
                                     {errors.category && <span className="error">{errors.category}</span>}
-                                    <div className="input-element">
                                         <label htmlFor="Outlet">Outlet</label>
-                                        <select value={outlet} onChange={(e) => { setOutlet(e.target.value) }}>
+                                        { allOutlets.length === 0 ? <Link to='category'><Button>Add</Button></Link> : <select value={outlet} onChange={(e) => { setOutlet(e.target.value) }}>
                                             {allOutlets.map((item) => {
                                                 return <option key={item._id} value={item._id} >{item.outletName}</option>
                                             })}
-                                        </select>
+                                        </select>}
                                         {errors.outlet && <span className="error">{errors.outlet}</span>}
-                                    </div>
                                     <div className="buttons">
                                         <Button onClick={handleCloseModal}>Cancel</Button>
                                         <Button type='submit'> {loading ? <Loader /> : 'Save'}</Button>
@@ -128,10 +122,12 @@ const Category = () => {
                 </div>
             </div>
             <div className="category-list">
-            <p>These are your current category(s)</p>
                 { 
-                    isLoading ? (<Splashscreen />) : (
-                        categoryList.length === 0 ? <div><p>You do not have any catgory</p></div> : (<table>
+                    isLoading ? (<Splashscreen />) :
+                        categoryList.length === 0 ? <div><p>Your category list is empty.</p></div> : (
+                            <>
+                        <p>These are your current category(s)</p>
+                        <table>     
                             <thead>
                                 <tr>
                                     <th>Category</th>
@@ -145,7 +141,9 @@ const Category = () => {
                                 </tr>
                             ))}
                             </tbody>
-                        </table>))
+                        </table>
+                        </>
+                        )
                 }
             </div>
         </DIV>
@@ -269,7 +267,7 @@ const ModalContent = styled.div`
   margin: 10px 0;
   form{
     
-    input{
+    input, select{
         outline: none;
         padding: 10px;
         font-size: 15px;

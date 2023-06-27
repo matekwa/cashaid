@@ -142,6 +142,19 @@ router.put("/addOutlet", async (req, res) => {
       res.json({ status: "error", data: error });
     }
   });
+
+  router.get("/fetchCategories", async (req, res) => {
+    const shopID = req.query.ownerID;
+  
+    try {
+      const data = await categoriesModelTemplate.find({ shopID });
+      const categories = data.length > 0 ? data : [];
+      res.json({ status: "ok", data: categories });
+    } catch (error) {
+      res.json({ status: "error getting categories", data: error });
+    }
+  });
+  
   
 
   router.get("/fetchUsers", async (req, res) => {
@@ -155,9 +168,6 @@ router.put("/addOutlet", async (req, res) => {
     }
   });
   
-  
-
-
 router.post("/addEmployee", async (req, res)=> {
     const ownerID = req.body.ownerID;
     const saltedPassword = await bcrypt.genSalt(10);
@@ -201,7 +211,7 @@ router.post("/addCategory", async (req, res) => {
         shopID: req.body.shopID,
         outletID: req.body.outletID
     })
-    category.save().then((data) => {res.json({status: "ok", data: data})} ).catch((error)=> {res.json({error: "error", data:error})});
+    category.save().then((data) => {res.json({status: "ok", data: data})} ).catch((error)=> {res.json({error: "error adding category", data:error})});
     await shopModelTemplate.findOneAndUpdate({ ownerID }, { $push: { categories: req.body.categoryName } });
   } catch (error) {
      res.json({ status: "error", error: error.message });
@@ -221,6 +231,7 @@ router.put("/addSupplier", async (req, res) => {
           businessName: req.body.businessName
       } 
       await shopModelTemplate.findOneAndUpdate({ ownerID }, { $push: { suppliers: supplierData } });
+      res.json({ status: "ok" });
   } catch (error) {
      res.json({status:"updateSupplierError", error: error.message });
   }

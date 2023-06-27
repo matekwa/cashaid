@@ -20,6 +20,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import ErrorPage from './components/ErrorPage';
 import Sidebar from './components/Sidebar';
+import Category from './inventory/Category';
 
 function App() {
   const loggedIn = window.localStorage.getItem('isLoggedIn');
@@ -177,6 +178,16 @@ function App() {
                 <>
                   <Sidebar />
                   <Settings />
+                </>
+              ) : (
+                <Login />
+              )
+            } />
+              <Route path="category" element={
+              loggedIn ? (
+                <>
+                  <Sidebar />
+                  <Category />
                 </>
               ) : (
                 <Login />

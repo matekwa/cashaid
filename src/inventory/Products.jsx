@@ -32,12 +32,13 @@ const Products = () => {
   const [allOutlets, setAllOutlets] = useState([]);
   const natureOfProduct = ["Manufactured", "Raw Material"];
   const typesOfBarcode = ["UPC (Universal Product Code)",
-  "EAN (European Article Numbering)",
-  "Code 39",
-  "Code 128",
-  "QR Code (Quick Response Code)",
-  "PDF417",
-  "Data Matrix"];
+                          "EAN (European Article Numbering)",
+                          "Code 39",
+                          "Code 128",
+                          "QR Code (Quick Response Code)",
+                          "PDF417",
+                          "Data Matrix"
+                        ];
   const vat = ["Incl VAT", "Excl VAT"];
 
   const renderComponent = () => {
