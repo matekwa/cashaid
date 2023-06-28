@@ -25,12 +25,14 @@ const Products = () => {
   const [supplier, setSupplier] = useState('');
   const [physicalStock, setPhysicalStock] = useState('');
   const [stockLimit, setStockLimit] = useState('');
+  const [measurementUnit, setMeasurementUnit] = useState('');
+  const [storageLocation, setStorageLocation] = useState('');
   const [VAT, setVAT] = useState(false);
   const [tax, setTax] = useState('');
   const [allSuppliers, setAllSuppliers] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
   const [allOutlets, setAllOutlets] = useState([]);
-  const natureOfProduct = ["Manufactured", "Raw Material"];
+  const natureOfProduct = ["Raw Material", "Components & Parts", "Merchandise", "Consumables", "Perishable Goods", "Supplies"];
   const typesOfBarcode = ["UPC (Universal Product Code)",
                           "EAN (European Article Numbering)",
                           "Code 39",
@@ -195,7 +197,7 @@ const Products = () => {
                   {errors.productNature && <span className="error">{errors.productNature}</span>}
                 </div>
                 <div className="input-element">
-                  <label htmlFor="serial no.">Serial No.</label>
+                  <label htmlFor="serial no.">Stock Keeping Unit No.</label>
                   <input type="text" placeholder='Serial No.' value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} />
                   {errors.serialNumber && <span className="error">{errors.serialNumber}</span>}
                 </div>
@@ -251,6 +253,10 @@ const Products = () => {
                   </div>
                 </div>)}
                 <div className='input-element'>
+                  <label htmlFor="Unit of measurement">Unit of measurement</label>
+                  <input type="text" placeholder='E.g KGS, Cans e.t.c' value={measurementUnit} onChange={(e) => setMeasurementUnit(e.target.value)} />
+                </div>
+                <div className='input-element'>
                   <label htmlFor="Product Image">Product Image</label>
                   <input type="file" />
                 </div>
@@ -280,9 +286,14 @@ const Products = () => {
                   {errors.physicalStock && <span className="error">{errors.physicalStock}</span>}
                 </div>
                 <div className="input-element">
-                  <label htmlFor="quantity">Stock limit for alert</label>
+                  <label htmlFor="quantity">Ideal stock limit</label>
                   <input type="number" placeholder='Stock limit for alert' value={stockLimit} onChange={(e) => setStockLimit(e.target.value)} />
                   {errors.stockLimit && <span className="error">{errors.stockLimit}</span>}
+                </div>
+                <div className="input-element">
+                  <label htmlFor="Storage location">Storage location</label>
+                  <input type="text" placeholder='E.g Cabin number' value={storageLocation} onChange={(e) => setStorageLocation(e.target.value)} />
+                  {errors.storageLocation && <span className="error">{errors.storageLocation}</span>}
                 </div>
               </div>
             </div>

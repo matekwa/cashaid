@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Category from './Category';
 import Suppliers from './Suppliers';
 import Product from './Products';
+import Brand from './Brand'
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -27,6 +28,8 @@ const ProductCatalogue = () => {
                 return <Suppliers />;
             case 'products':
                 return <Product />;
+            case 'brand':
+                return <Brand />;    
             default:
                 return <Category />;
         }
@@ -54,6 +57,7 @@ const ProductCatalogue = () => {
                 >
                     <Tab value="category" label="Product category" onClick={()=>setComponent('category')} />
                     <Tab value="supplier" label="Suppliers" onClick={()=>setComponent('suppliers')} />
+                    <Tab value="supplier" label="Brand" onClick={()=>setComponent('brand')} />
                     <Tab value="products" label="Products" onClick={()=>setComponent('products')} />
                 </Tabs>
             </Box>

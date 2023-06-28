@@ -131,6 +131,17 @@ router.put("/addOutlet", async (req, res) => {
     }
   });
 
+  router.put("/addBrand", async (req, res) => {
+    const ownerID = req.body.shopID;
+    try {
+      await shopModelTemplate.findOneAndUpdate({ ownerID }, { $push: {  brands: req.body.brandName } });
+  
+      res.status(200).json({ status: "ok" });
+    } catch (error) {
+      res.json({ status: "error", error: error });
+    }
+  });
+
   router.get("/fetchOutlets", async (req, res) => {
     const ownerID = req.query.ownerID;
   
@@ -155,7 +166,17 @@ router.put("/addOutlet", async (req, res) => {
     }
   });
   
+  router.get("/fetchBrands", async (req, res) => {
+    const shopID = req.query.shopID;
   
+    try {
+      const data = await shopModelTemplate.find({ shopID });
+      const brands = data.length > 0 ? data : [];
+      res.json({ status: "ok", data: brands });
+    } catch (error) {
+      res.json({ status: "error getting brands", data: error });
+    }
+  });
 
   router.get("/fetchUsers", async (req, res) => {
     const shopID = req.query.shopID;

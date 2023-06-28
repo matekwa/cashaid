@@ -26,6 +26,7 @@ const supplierSchema = new mongoose.Schema({
 const shopSchema = new mongoose.Schema({
   name: String,
   ownerID: String,
+  brands: [String],
   categories: [String],
   outlets: [outletSchema],
   suppliers: [supplierSchema]
