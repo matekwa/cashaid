@@ -1,20 +1,25 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-  refNo: String,
-  productLabel: String,
-  serialNo: String,
-  barcodeType: String,
-  barcodeValue: String,
+  productName: String,
+  productNature: String,
   productDescription: String,
+  category: String,
+  barcodeValue: String,
   wholesalePrice: Number,
   retailPrice: Number,
-  tax: Number,
-  productImage: String,
-  outletID: String,
   supplier: String,
   physicalStock: Number,
-  stockLimit: Number
+  stockLimit: Number,
+  outlet: String,
+  measurementUnit: Number,
+  unit: String,
+  tax: {
+    type: Number,
+    default: 0
+  },
+  storageLocation: String,
+  brand: String
 });
 
 const lunchSchema = new mongoose.Schema({

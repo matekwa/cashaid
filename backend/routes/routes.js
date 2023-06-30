@@ -154,6 +154,18 @@ router.put("/addOutlet", async (req, res) => {
     }
   });
 
+  router.get("/fetchSuppliers", async (req, res) => {
+    const ownerID = req.query.ownerID;
+  
+    try {
+      const data = await shopModelTemplate.find({ ownerID });
+      const suppliers = data.length > 0 ? data[0].suppliers : [];
+      res.json({ status: "ok", data: suppliers });
+    } catch (error) {
+      res.json({ status: "error", data: error });
+    }
+  });
+
   router.get("/fetchCategories", async (req, res) => {
     const shopID = req.query.ownerID;
   
@@ -255,6 +267,36 @@ router.put("/addSupplier", async (req, res) => {
       res.json({ status: "ok" });
   } catch (error) {
      res.json({status:"updateSupplierError", error: error.message });
+  }
+});
+
+
+//Route for products from Retail.jsx
+router.put("/addRetailProduct", async (req, res) => {
+  const shopID = req.body.ownerID;
+  try {
+      const productData = {
+          productName: req.body.productLabel,
+          productNature: req.body.productNature,
+          productDescription: req.body.productDescription,
+          category: req.body.category,
+          barcodeValue: req.body.barcodeValue,
+          wholesalePrice: req.body.wholesalePrice,
+          retailPrice: req.body.retailPrice,
+          supplier: req.body.supplier,
+          physicalStock: req.body.physicalStock,
+          stockLimit: req.body.stockLimit,
+          outlet: req.body.outlet,
+          measurementUnit: req.body.measurementUnit,
+          unit: req.body.unit,
+          tax: req.body.tax,
+          storageLocation: req.body.storageLocation,
+          brand: req.body.brand,
+      } 
+      await categoriesModelTemplate.findOneAndUpdate({ shopID }, { $push: { Products: productData } });
+      res.json({ status: "ok" });
+  } catch (error) {
+     res.json({status:"productAdded", error: error.message });
   }
 });
 module.exports = router;
