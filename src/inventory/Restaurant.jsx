@@ -3,9 +3,10 @@ import styled, { keyframes } from 'styled-components';
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
 import axios from 'axios';
 import { baseURL } from '../utils/constant';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import JsBarcode from 'jsbarcode';
 import { AiOutlineScan } from 'react-icons/ai';
+import { BiSearch } from 'react-icons/bi';
 
 
 const Restaurant = () => {
@@ -19,9 +20,9 @@ const Restaurant = () => {
     const [allCategories, setAllCategories] = useState([]);
     const [allOutlets, setAllOutlets] = useState([]);
     const [allBrands, setAllBrands] = useState([]);
-    const natureOfProduct = ["Raw Material", "Consumables", "Perishable Goods", "Supplies & Equipments"];
+    const natureOfProduct = ["Raw Material", "Meal", "Consumables", "Perishable Goods", "Supplies & Equipments"];
     const barcodeRef = useRef(null);
-    const [shopName, setShopName] = useState('SkyFalke');
+    const [shopName, setShopName] = useState('');
 
 
     const bus_id = searchParams.get('bus_id');
@@ -38,7 +39,6 @@ const Restaurant = () => {
     const [stockLimit, setStockLimit] = useState('');
     const [brand, setBrand] = useState('');
     const [measurementUnit, setMeasurementUnit] = useState('');
-    const [storageLocation, setStorageLocation] = useState('');
     const [IncVAT, setIncVAT] = useState(false);
     const [tax, setTax] = useState('');
     const [barcodeValue, setBarcodeValue] = useState('');
@@ -74,6 +74,7 @@ const Restaurant = () => {
       let barcodeString = '';
       const scan = ()=>{
         setHasNoBarcode(false);
+        setBarcodeValue('Please scan the bar code');
         const handleKeydown = (e) => {
           //Check if enter (ke code 13) is pressed the handle scan
           if(e.keyCode === 13 && barcodeString.length > 3){
@@ -91,7 +92,7 @@ const Restaurant = () => {
           }, 100);
         }
         document.addEventListener('keydown', handleKeydown);
-        return cleanUp = () =>{
+        return  () =>{
           document.removeEventListener('keydown', handleKeydown);
         }
       }
@@ -99,6 +100,12 @@ const Restaurant = () => {
         setBarcodeValue(barcodeInputString);
       }
       useEffect(() => {
+        try{
+          const shop = axios.get(`${baseURL}/fetchStoreName`, { params: { ownerID: bus_id } });
+          setShopName(shop.data.data);
+        } catch(error){
+          console.log(`Error feching shop name with error value of ${error} `);
+        }
         if (barcodeValue) {
           JsBarcode(barcodeRef.current, barcodeValue), {
             format: 'CODE128',
@@ -159,9 +166,6 @@ const Restaurant = () => {
             if (!productNature) {
               validationErrors.productNature = 'Product nature is required';
             }
-            if (!brand) {
-                validationErrors.brand = 'Choose a product brand';
-              }
             if (!description) {
               validationErrors.outlet = 'Product description is required';
             }
@@ -172,19 +176,13 @@ const Restaurant = () => {
               validationErrors.outlet = 'Please choose an outlet';
             }
             if (!wholesalePrice) {
-              validationErrors.wholesalePrice = "Enter this product's wholesale price";
+              validationErrors.wholesalePrice = "Enter this product's wholesale/manufacturing price";
             }
             if (!retailPrice) {
               validationErrors.retailPrice = 'Enter retail price';
             }
-            if (!supplier) {
-              validationErrors.supplier = 'Choose a supplier';
-            }
-            if (!physicalStock) {
-              validationErrors.physicalStock = 'Enter physical stock';
-            }
-            if (!stockLimit) {
-              validationErrors.stockLimit = 'Enter stock limit';
+            if (!measurementUnit) {
+              validationErrors.measurementUnit = 'Enter measuremnt unit';
             }
             if (Object.keys(validationErrors).length === 0) {
               // Form is valid, submit data to the server
@@ -221,7 +219,7 @@ const Restaurant = () => {
                   setPhysicalStock('');
                   setStockLimit('');
                   setMeasurementUnit('');
-                  setVAT(false);
+                  setIncVAT(false);
                   setTax('');
                   setErrors({});
                   alert('Product added successfully!');
@@ -270,17 +268,22 @@ const Restaurant = () => {
                   </select>
                   {errors.productNature && <span className="error">{errors.productNature}</span>}
                 </div>
-                <div className="input-element">
+                {natureOfProduct.map((item)=>{
+                  item === "Consumables" || item === "Perishable Goods" || item === "Supplies & Equipments" && <div className="input-element">
                   <label htmlFor="Brand">Brand</label>
                   <select value={brand} onChange={(e) => setBrand(e.target.value)}>
                     {allBrands.map((item) => {
-                      return <option key={item} value={item} >{item}</option>
+                      if(item === ''){
+                        return <Link to='addbrand'><span>Add</span></Link>
+                      } else{
+                        return <option key={item} value={item} >{item}</option>
+                        }
                     })}
                   </select>
-                  {errors.brand && <span className="error">{errors.brand}</span>}
                 </div>
+                })}
                 <div className="input-element">
-                  <label htmlFor="serial no.">SKU Number</label>
+                  <label htmlFor="serial no.">Product Code Number</label>
                   <div className="search">
                     <BiSearch />
                     <input type="text" value={barcodeValue} readOnly />
@@ -298,7 +301,7 @@ const Restaurant = () => {
                 </div>
                 <div className="input-element">
                   <label htmlFor="category">Category</label>
-                  <select name="category" value={category} onClick={() => setCategory(e.target.value)}>
+                  <select name="category" value={category} onClick={(e) => setCategory(e.target.value)}>
                     {allCategories.map((item) => {
                       return <option key={item._id} value={item._id} >{item.name}</option>
                     })}
@@ -331,37 +334,53 @@ const Restaurant = () => {
                     <input type="number" value={measurementUnit} onChange={(e) => setMeasurementUnit(e.target.value)} />
                     <input type="text" placeholder='Unit' value={unit} onChange={(e) => setUnit(e.target.value)} />
                   </div>
+                  {errors.measurmentUnit && <span className="error">{errors.measurmentUnit}</span>}
                 </div>
                 <div className="input-element">
                   <label htmlFor="Outlet">Outlet</label>
-                  <select value={outlet} onChange={() => setOutlet(e.target.value)}>
+                  <select value={outlet} onChange={(e) => setOutlet(e.target.value)}>
                     {allOutlets.map((item) => {
-                      return <option key={item._id} value={item._id} >{item.outletName}</option>
+                      if(item === ''){
+                        return <Link to='addoutlet'><span>Add</span></Link>
+                      } else {
+                        return <option key={item._id} value={item._id} >{item.outletName}</option>
+                      }
                     })}
                   </select>
                   {errors.outlet && <span className="error">{errors.outlet}</span>}
                 </div>
               </div>
               <div>
-                <div className="input-element">
-                  <label htmlFor="supplier">Supplier</label>
-                  <select value={supplier} onSelect={() => setSupplier(e.target.value)} >
-                    {allSuppliers.map((item) => {
-                      return <option key={item._id} value={item.businessName} >{item.businessName}</option>
-                    })}
-                  </select>
-                  {errors.supplier && <span className="error">{errors.supplier}</span>}
-                </div>
-                <div className="input-element">
-                  <label htmlFor="Physical Stock">Physical stock</label>
-                  <input type="number" placeholder='Physical stock' value={physicalStock} onChange={(e) => setPhysicalStock(e.target.value)} />
-                  {errors.physicalStock && <span className="error">{errors.physicalStock}</span>}
-                </div>
-                <div className="input-element">
-                  <label htmlFor="quantity">Ideal stock limit</label>
-                  <input type="number" placeholder='Stock limit for alert' value={stockLimit} onChange={(e) => setStockLimit(e.target.value)} />
-                  {errors.stockLimit && <span className="error">{errors.stockLimit}</span>}
-                </div>
+                {
+                  natureOfProduct.map((item) => {
+                    item != "Meal" && <div className="input-element">
+                    <label htmlFor="supplier">Supplier</label>
+                    <select value={supplier} onSelect={(e) => setSupplier(e.target.value)} >
+                      {allSuppliers.map((item) => {
+                        if(item === ''){
+                          return <Link to='addsupplier'><span>Add</span></Link>
+                        } else {
+                          return <option key={item._id} value={item.businessName} >{item.businessName}</option>
+                        }
+                      })}
+                    </select>
+                  </div>
+                  })
+                }
+                {
+                  natureOfProduct.map((item)=> {
+                    item === "" &&  <>
+                      <div className="input-element">
+                        <label htmlFor="Physical Stock">Physical stock</label>
+                        <input type="number" placeholder='Physical stock' value={physicalStock} onChange={(e) => setPhysicalStock(e.target.value)} />
+                      </div>
+                      <div className="input-element">
+                        <label htmlFor="quantity">Ideal stock limit</label>
+                        <input type="number" placeholder='Stock limit for alert' value={stockLimit} onChange={(e) => setStockLimit(e.target.value)} />
+                      </div>
+                    </>
+                  })
+                }
               </div>
             </div>
             <div className="buttons">

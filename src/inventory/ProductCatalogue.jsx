@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { Link } from 'react-router-dom';
@@ -13,8 +13,8 @@ import Box from '@mui/material/Box';
 
 const ProductCatalogue = () => {
 
-    const [value, setValue] = React.useState('category');
-    const [component, setComponent] = React.useState('category');
+    const [value, setValue] = useState('category');
+    const [component, setComponent] = useState('category');
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -34,6 +34,10 @@ const ProductCatalogue = () => {
                 return <Category />;
         }
     }
+
+    useEffect(()=> {
+        document.title = "Product Catalogue"
+    }, []);
 
     return (
         <Section>

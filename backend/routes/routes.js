@@ -200,6 +200,17 @@ router.put("/addOutlet", async (req, res) => {
       res.json({ status: "error", data: error });
     }
   });
+
+  router.get("/fetchStoreName", async (req, res) => {
+    const shopID = req.query.shopID;
+  
+    try {
+      const data = await shopModelTemplate.find({ _id: ownerID });
+      res.json({ status: "ok", data: data });
+    } catch (error) {
+      res.json({ status: "error fetching shop name", data: error });
+    }
+  });
   
 router.post("/addEmployee", async (req, res)=> {
     const ownerID = req.body.ownerID;
@@ -296,7 +307,36 @@ router.put("/addRetailProduct", async (req, res) => {
       await categoriesModelTemplate.findOneAndUpdate({ shopID }, { $push: { Products: productData } });
       res.json({ status: "ok" });
   } catch (error) {
-     res.json({status:"productAdded", error: error.message });
+     res.json({status:"error", error: error.message });
+  }
+});
+
+
+//Route for products from Restaurant.jsx
+router.put("/addRestaurantProduct", async (req, res) => {
+  const shopID = req.body.ownerID;
+  try {
+      const productData = {
+          productName: req.body.productLabel,
+          productNature: req.body.productNature,
+          productDescription: req.body.productDescription,
+          category: req.body.category,
+          barcodeValue: req.body.barcodeValue,
+          wholesalePrice: req.body.wholesalePrice,
+          retailPrice: req.body.retailPrice,
+          supplier: req.body.supplier,
+          physicalStock: req.body.physicalStock,
+          stockLimit: req.body.stockLimit,
+          outlet: req.body.outlet,
+          measurementUnit: req.body.measurementUnit,
+          unit: req.body.unit,
+          tax: req.body.tax,
+          brand: req.body.brand,
+      } 
+      await categoriesModelTemplate.findOneAndUpdate({ shopID }, { $push: { Products: productData } });
+      res.json({ status: "ok" });
+  } catch (error) {
+     res.json({status:"error", error: error.message });
   }
 });
 module.exports = router;

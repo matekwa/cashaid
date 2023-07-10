@@ -6,6 +6,7 @@ import { baseURL } from '../utils/constant';
 import { useLocation } from 'react-router-dom';
 import JsBarcode from 'jsbarcode';
 import { AiOutlineScan } from 'react-icons/ai';
+import { BiSearch } from 'react-icons/bi';
 
 
 const Retail = () => {
@@ -21,7 +22,7 @@ const Retail = () => {
     const [allBrands, setAllBrands] = useState([]);
     const natureOfProduct = ["Components & Parts", "Merchandise", "Consumables", "Perishable Goods", "Supplies & Equipments"];
     const barcodeRef = useRef(null);
-    const [shopName, setShopName] = useState('SkyFalke');
+    const [shopName, setShopName] = useState('');
 
 
     const bus_id = searchParams.get('bus_id');
@@ -91,7 +92,7 @@ const Retail = () => {
           }, 100);
         }
         document.addEventListener('keydown', handleKeydown);
-        return cleanUp = () =>{
+        return () =>{
           document.removeEventListener('keydown', handleKeydown);
         }
       }
@@ -99,6 +100,12 @@ const Retail = () => {
         setBarcodeValue(barcodeInputString);
       }
       useEffect(() => {
+        try{
+          const shop = axios.get(`${baseURL}/fetchStoreName`, { params: { ownerID: bus_id } });
+          setShopName(shop.data.data);
+        } catch(error){
+          console.log(`Error feching shop name with error value of ${error} `);
+        }
         if (barcodeValue) {
           JsBarcode(barcodeRef.current, barcodeValue), {
             format: 'CODE128',
@@ -223,7 +230,7 @@ const Retail = () => {
                   setStockLimit('');
                   setMeasurementUnit('');
                   setStorageLocation('');
-                  setVAT(false);
+                  setIncVAT(false);
                   setTax('');
                   setErrors({});
                   alert('Product added successfully!');
@@ -300,7 +307,7 @@ const Retail = () => {
                 </div>
                 <div className="input-element">
                   <label htmlFor="category">Category</label>
-                  <select name="category" value={category} onClick={() => setCategory(e.target.value)}>
+                  <select name="category" value={category} onClick={(e) => setCategory(e.target.value)}>
                     {allCategories.map((item) => {
                       return <option key={item._id} value={item._id} >{item.name}</option>
                     })}
@@ -316,7 +323,7 @@ const Retail = () => {
                   <label htmlFor="retail price">Retail price</label>
                     <div className='input-element-flex'>
                         <input type="number" placeholder='Retail price' value={retailPrice} onChange={(e) => setRetailPrice(e.target.value)} />
-                        <input type='checkbox' value="Incl VAT" onChange={() => setIncVAT(true)}/>
+                        <input type='checkbox' value="Incl VAT" onChange={(e) => setIncVAT(true)}/>
                     </div>
                   {errors.retailPrice && <span className="error">{errors.retailPrice}</span>}
                 </div>
@@ -336,7 +343,7 @@ const Retail = () => {
                 </div>
                 <div className="input-element">
                   <label htmlFor="Outlet">Outlet</label>
-                  <select value={outlet} onChange={() => setOutlet(e.target.value)}>
+                  <select value={outlet} onChange={(e) => setOutlet(e.target.value)}>
                     {allOutlets.map((item) => {
                       return <option key={item._id} value={item._id} >{item.outletName}</option>
                     })}
@@ -347,7 +354,7 @@ const Retail = () => {
               <div>
                 <div className="input-element">
                   <label htmlFor="supplier">Supplier</label>
-                  <select value={supplier} onSelect={() => setSupplier(e.target.value)} >
+                  <select value={supplier} onSelect={(e) => setSupplier(e.target.value)} >
                     {allSuppliers.map((item) => {
                       return <option key={item._id} value={item.businessName} >{item.businessName}</option>
                     })}

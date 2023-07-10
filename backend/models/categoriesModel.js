@@ -22,11 +22,11 @@ const productSchema = new mongoose.Schema({
   brand: String
 });
 
-const lunchSchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema({
   categoryName: String,
   shopID: String,
   outletID: String,
   Products: [productSchema]
 });
 
-module.exports = mongoose.model('categories', lunchSchema);
+module.exports = mongoose.model('categories', categorySchema);

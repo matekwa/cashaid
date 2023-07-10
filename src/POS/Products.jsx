@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { BiSearch } from 'react-icons/bi'
+import { BiSearch } from 'react-icons/bi';
 import { AiOutlineScan } from 'react-icons/ai';
 
 const Products = () => {
+
+    useEffect(()=> {
+        
+    })
     return (
         <Section>
             <div className="search">

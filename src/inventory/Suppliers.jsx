@@ -76,6 +76,10 @@ const Suppliers = () => {
     }
   }
 
+  useEffect(()=> {
+
+  }, []);
+
   return (
     <DIV>
       <div className="suppliers">
